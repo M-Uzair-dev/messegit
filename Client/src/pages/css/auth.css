@@ -5,6 +5,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: 1500px;
+}
+.mobilelogo {
+  display: none;
 }
 
 /*                   Left Side                   */
@@ -16,7 +20,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  padding-right: 10px;
 }
 .leftcont * {
   width: 100%;
@@ -29,7 +32,7 @@
   text-align: center;
 }
 .welcomediv h1 {
-  font-size: 40px;
+  font-size: 45px;
   margin: 0;
   font-weight: 600;
 }
@@ -38,6 +41,44 @@
   color: grey;
   margin: 2% 0;
 }
+.remembermediv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+.remembermediv input {
+  height: 18px;
+  width: 18px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+.inneremember {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.remembermediv label {
+  height: max-content;
+  margin: 0;
+}
+.remembermediv p {
+  margin: 0;
+  text-align: right;
+  color: rgb(0, 132, 255);
+  cursor: pointer;
+}
+
+.leftlastdiv {
+  text-align: center;
+  font-size: 18px;
+}
+.leftlastdiv span {
+  color: rgb(0, 140, 255);
+  cursor: pointer;
+}
+
 /*                   Right Side                   */
 
 .rightcont {
@@ -82,4 +123,34 @@
   background-color: white;
   margin-top: 20px;
   border-radius: 5px;
+}
+
+/*               Responsive css        */
+
+@media (max-width: 950px) {
+  .welcomediv h1 {
+    font-size: 35px;
+  }
+}
+@media (max-width: 820px) {
+  .mobilelogo {
+    display: block;
+    height: 200px;
+    width: auto;
+    margin: 0;
+  }
+  .maincont {
+    justify-content: center;
+  }
+  .rightcont {
+    display: none;
+  }
+  .leftcont {
+    width: 100%;
+    max-width: 500px;
+    justify-content: flex-start;
+  }
+  .remembermediv {
+    margin: 10px 0 20px 0;
+  }
 }

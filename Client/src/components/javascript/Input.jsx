@@ -7,7 +7,7 @@ const Input = (props) => {
     <div className="input">
       <label htmlFor="input">{props.label}</label>
       <input id="input" placeholder={props.placeholder} type={props.type} />
-      <VisibilityIcon />
+      {props.type === "password" ? <VisibilityIcon className="icon" /> : <></>}
     </div>
   );
 };

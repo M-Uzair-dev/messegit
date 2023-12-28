@@ -1,9 +1,14 @@
 import React from "react";
+import "../css/button.css";
 
 const Button = (props) => {
   return (
-    <div>
-      <button>{props.text}</button>
+    <div className="buttondiv">
+      {props.dark === "yes" ? (
+        <button className="dark">{props.text}</button>
+      ) : (
+        <button className="light">{props.text}</button>
+      )}
     </div>
   );
 };

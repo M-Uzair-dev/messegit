@@ -10,41 +10,45 @@ const Login = () => {
   return (
     <div className="maincont">
       <section className="leftcont">
+        <img src={logo} alt="Logo" className="mobilelogo" />
         <div className="welcomediv">
           <h1>Welcome Back</h1>
           <p>Your contacts await you !</p>
         </div>
-        <div className="inputdiv">
-          <Input
-            label="Username"
-            placeholder="Enter your username here"
-            type="text"
-          />
-          <Input
-            label="Password"
-            placeholder="Enter your password here"
-            type="password"
-          />
+        <div>
+          <div className="inputdiv">
+            <Input label="Email" placeholder="Enter your email" type="email" />
+            <Input
+              label="Password"
+              placeholder="Enter your password"
+              type="password"
+            />
+          </div>
+          <div className="remembermediv">
+            <div className="inneremember">
+              <input type="checkbox" id="remember" />{" "}
+              <label htmlFor="remember">Remember me ?</label>
+            </div>
+            <p>Forgot Password ?</p>
+          </div>
         </div>
-        <div className="remembermediv">
-          <input type="checkbox" /> <label>Remember me ?</label>
-          <p>Forgot Password ?</p>
-        </div>
-        <div className="buttonsdiv">
-          <Button text="Login" />
-          <Button text="Continue with Google" />
-        </div>
-        <div className="leftlastdiv">
-          <p>
-            Don't have an account ?{" "}
-            <span
-              onClick={() => {
-                navigate("/signup");
-              }}
-            >
-              Sign up
-            </span>
-          </p>
+        <div>
+          <div className="buttonsdiv">
+            <Button text="Login" dark="yes" />
+            <Button text="Continue with Google" />
+          </div>
+          <div className="leftlastdiv">
+            <p>
+              Don't have an account ?{" "}
+              <span
+                onClick={() => {
+                  navigate("/signup");
+                }}
+              >
+                Sign up
+              </span>
+            </p>
+          </div>
         </div>
       </section>
       <section className="rightcont">

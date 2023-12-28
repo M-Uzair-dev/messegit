@@ -1,0 +1,26 @@
+.buttondiv {
+  width: 100%;
+}
+.buttondiv button {
+  padding: 15px 0;
+  border: none;
+  border-radius: 20px;
+  margin: 10px 0;
+  font-size: 21px;
+  width: 100%;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.dark {
+  background-color: black;
+  color: white;
+}
+.dark:hover {
+  opacity: 0.8;
+}
+.light {
+  background-color: rgb(228, 228, 228);
+}
+.light:hover {
+  background-color: rgb(211, 211, 211);
+}

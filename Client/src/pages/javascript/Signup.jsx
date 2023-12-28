@@ -10,19 +10,16 @@ const Signup = () => {
     <div>
       <div className="maincont">
         <section className="leftcont">
+          <img src={logo} alt="Logo" className="mobilelogo" />
           <div className="welcomediv">
             <h1>Sign up</h1>
             <p>Create your messegit account</p>
           </div>
           <div className="inputdiv">
-            <Input
-              label="Username"
-              placeholder="Create a username"
-              type="text"
-            />
+            <Input label="Email" placeholder="Enter your email" type="text" />
             <Input
               label="Password"
-              placeholder="Create a password"
+              placeholder="Enter your password"
               type="password"
             />
           </div>
@@ -31,7 +28,7 @@ const Signup = () => {
             <p>Need Help ?</p>
           </div>
           <div className="buttonsdiv">
-            <Button text="Login" />
+            <Button dark="yes" text="Login" />
             <Button text="Continue with Google" />
           </div>
           <div className="leftlastdiv">
