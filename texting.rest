@@ -1,0 +1,1 @@
+DELETE http://localhost:5000/auth/delete/65901a0af89c9899ee229651
