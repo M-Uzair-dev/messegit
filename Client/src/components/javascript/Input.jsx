@@ -12,7 +12,7 @@ const Input = (props) => {
         value={props.value}
         onChange={(event) => props.onchange(event)}
         placeholder={props.placeholder}
-        id={props.type}
+        id={props.id}
         type={showpass ? "text" : props.type}
         style={props.type === "password" ? { width: "80%" } : { width: "90%" }}
       />

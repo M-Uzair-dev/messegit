@@ -3,6 +3,7 @@
   position: relative;
   margin: 20px 0;
   border-radius: 20px;
+  width: 100%;
 }
 .input input {
   border: none;

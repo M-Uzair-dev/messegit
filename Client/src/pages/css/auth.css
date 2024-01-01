@@ -124,6 +124,25 @@
   margin-top: 20px;
   border-radius: 5px;
 }
+.maincont2 {
+  width: 90vw;
+  max-width: 500px;
+  margin: auto;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.maincont2 h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  font-size: 40px;
+  background: linear-gradient(to bottom, #7563c9, #49bae4);
+  background-clip: text;
+  color: transparent;
+}
 
 /*               Responsive css        */
 

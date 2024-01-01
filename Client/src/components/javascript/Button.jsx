@@ -4,18 +4,14 @@ import "../css/button.css";
 const Button = (props) => {
   return (
     <div className="buttondiv">
-      {props.dark === "yes" ? (
-        <button
-          className="dark"
-          onClick={() => {
-            props.submit();
-          }}
-        >
-          {props.text}
-        </button>
-      ) : (
-        <button className="light">{props.text}</button>
-      )}
+      <button
+        onClick={() => {
+          props.submit();
+        }}
+        className={props.theme}
+      >
+        {props.text}
+      </button>
     </div>
   );
 };

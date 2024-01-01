@@ -1,16 +1,15 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { SnackbarProvider } from "notistack";
+import { Outlet } from "react-router-dom";
+import { CookiesProvider } from "react-cookie";
 
 function App() {
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (localStorage.getItem("loggedin") !== "true") {
-      navigate("/login");
-      localStorage.clear();
-    }
-  }, [localStorage.getItem("loggedin")]);
-
-  return <>Main Page</>;
+  return (
+    <CookiesProvider>
+      <SnackbarProvider maxSnack={3}>
+        <Outlet />
+      </SnackbarProvider>
+    </CookiesProvider>
+  );
 }
 
 export default App;

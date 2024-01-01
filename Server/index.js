@@ -3,16 +3,20 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const auth = require("./Routes/authroute");
 const cookieParser = require("cookie-parser");
+require("dotenv").config();
 
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+  })
+);
 
 mongoose
-  .connect(
-    "mongodb+srv://messegit:messegit576@messegit.fmalf6v.mongodb.net/messegit?retryWrites=true&w=majority"
-  )
+  .connect(process.env.DATABASE_URL)
   .then(() => {
     console.log("Database connected !");
   })

@@ -24,3 +24,10 @@
 .light:hover {
   background-color: rgb(211, 211, 211);
 }
+.gradient {
+  background: linear-gradient(to bottom, #7663c9d5, #49bbe4c0);
+  color: white;
+}
+.gradient:hover {
+  background: linear-gradient(to bottom, #7663c9ef, #49bbe4ea);
+}

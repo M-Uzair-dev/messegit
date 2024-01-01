@@ -1,1 +1,6 @@
-DELETE http://localhost:5000/auth/delete/65901a0af89c9899ee229651
+POST http://localhost:5000/auth
+Content-Type: "application/json"
+
+{
+    "email": "uzairmanandev24@gmail.com"
+}
