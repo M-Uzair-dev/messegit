@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import Signup from "./pages/javascript/Signup";
-import Login from "./pages/javascript/Login";
+import Signup from "./pages/javascript/Auth/Signup";
+import Login from "./pages/javascript/Auth/Login";
 import Mainpage from "./pages/javascript/Mainpage";
 import Protected from "./pages/javascript/protected";
 
@@ -34,7 +34,5 @@ const router = createBrowserRouter([
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <RouterProvider router={router} />
 );

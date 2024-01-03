@@ -21,7 +21,7 @@ module.exports.validateUser = async (req, res, next) => {
         .status(401)
         .json({ status: false, message: "Unauthorized: Invalid user" });
     } else {
-      req.user = user; // Attach user to request for further use
+      req.user = user;
       res.status(200).json({ status: true, user });
     }
   } catch (error) {

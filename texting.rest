@@ -1,6 +1,7 @@
-POST http://localhost:5000/auth
+POST http://localhost:5000/auth/validate
 Content-Type: "application/json"
 
 {
-    "email": "uzairmanandev24@gmail.com"
+    "email": "uzairmanan3@gmail.com",
+    "password":"killerboy576225762"
 }

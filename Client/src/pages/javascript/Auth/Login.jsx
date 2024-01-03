@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Input from "../../components/javascript/Input";
-import Button from "../../components/javascript/Button";
+import Input from "../../../components/javascript/Input";
+import Button from "../../../components/javascript/Button";
 import { useNavigate } from "react-router-dom";
-import logo from "../../images/logo.PNG";
-import "../css/auth.css";
+import logo from "../../../images/logo.PNG";
+import "../../css/auth.css";
 import { useSnackbar } from "notistack";
 import { useCookies } from "react-cookie";
 
@@ -13,10 +13,15 @@ const Login = () => {
 
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [data, setData] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState("");
 
   useEffect(() => {
     if (cookies.jwt) {
-      navigate("/");
+      if (cookies.jwt === "undefined") {
+        removeCookie("jwt");
+      } else {
+        navigate("/");
+      }
     }
   }, [cookies]);
 
@@ -25,6 +30,7 @@ const Login = () => {
   };
 
   const submit = async () => {
+    setLoading("button");
     try {
       if (data.email === "") {
         enqueueSnackbar("Email is required", { variant: "error" });
@@ -48,6 +54,8 @@ const Login = () => {
       }
     } catch (error) {
       enqueueSnackbar("An error occurred during login", { variant: "error" });
+    } finally {
+      setLoading("");
     }
   };
 
@@ -88,8 +96,17 @@ const Login = () => {
         </div>
         <div>
           <div className="buttonsdiv">
-            <Button text="Login" theme="dark" submit={submit} />
-            <Button text="Continue with Google" theme="light" />
+            <Button
+              loading={loading === "button"}
+              text="Login"
+              theme="dark"
+              submit={submit}
+            />
+            <Button
+              loading={loading === "google"}
+              text="Continue with Google"
+              theme="light"
+            />
           </div>
           <div className="leftlastdiv">
             <p>

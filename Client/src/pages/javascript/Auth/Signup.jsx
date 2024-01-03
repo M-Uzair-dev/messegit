@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Input from "../../components/javascript/Input";
-import Button from "../../components/javascript/Button";
+import Input from "../../../components/javascript/Input";
+import Button from "../../../components/javascript/Button";
 import { useNavigate } from "react-router-dom";
-import logo from "../../images/logo.PNG";
+import logo from "../../../images/logo.PNG";
 import { useSnackbar } from "notistack";
+import "../../css/auth.css";
 import { useCookies } from "react-cookie";
 
 const Signup = () => {
@@ -23,7 +24,11 @@ const Signup = () => {
 
   useEffect(() => {
     if (cookies.jwt) {
-      navigate("/");
+      if (cookies.jwt === "undefined") {
+        removeCookie("jwt");
+      } else {
+        navigate("/");
+      }
     }
   }, [cookies]);
 

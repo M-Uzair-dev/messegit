@@ -4,12 +4,15 @@ import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../Redux/Features/userSlice";
 
 export default function Protected() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
+  const [cookies, removeCookie] = useCookies(["jwt"]);
 
   useEffect(() => {
     const validate = async () => {
@@ -37,15 +40,16 @@ export default function Protected() {
         if (!data.status) {
           removeCookie("jwt");
           navigate("/login");
-
-          enqueueSnackbar("Something went wrong, Please login again.", {
-            variant: "error",
-          });
         }
+        let temp = {
+          name: data.user.name,
+          username: data.user.username,
+          id: data.user._id,
+          imageurl: data.user.imageUrl,
+          about: data.user.about,
+        };
+        dispatch(setUser(temp));
       } catch (error) {
-        enqueueSnackbar("Something went wrong, Please login again.", {
-          variant: "error",
-        });
         removeCookie("jwt");
         navigate("/login");
       }
