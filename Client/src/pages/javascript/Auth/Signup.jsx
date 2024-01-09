@@ -43,26 +43,42 @@ const Signup = () => {
   const createaccount = async () => {
     if (finaldata.username === "") {
       enqueueSnackbar("Email is required", { variant: "error" });
-    } else if (finaldata.name === "") {
+    } else if (finaldata.password === "") {
       enqueueSnackbar("Password is required", { variant: "error" });
     } else {
       try {
-        if (finaldata.about === "")
+        if (finaldata.about === "") {
           finaldata.about = "The user has no about text.";
-        const user = await fetch("http://localhost:5000/auth/signup", {
+        }
+
+        const response = await fetch("http://localhost:5000/auth/signup", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(finaldata),
           credentials: "include",
         });
-        if (!user) {
-          enqueueSnackbar("An error occured !", { variant: "error" });
-          window.location.reload();
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          if (
+            response.status === 400 &&
+            data.errorMessage.includes("Username already exists")
+          ) {
+            enqueueSnackbar("Username already exists.", {
+              variant: "error",
+            });
+          } else {
+            enqueueSnackbar(data.errorMessage || "An error occurred!", {
+              variant: "error",
+            });
+          }
         } else {
           navigate("/");
+          console.log(data);
         }
       } catch (err) {
-        enqueueSnackbar("An error occured !", { variant: "error" });
+        enqueueSnackbar("An error occurred!", { variant: "error" });
       }
     }
   };

@@ -10,7 +10,7 @@ export default function Chat() {
     setMessege(e.target.value);
   };
   const chatContainerRef = useRef(null);
-
+  let username = "Uzair Manan";
   const [messeges, setMesseges] = useState([
     { messege: "Hey", yes: false },
 
@@ -81,7 +81,10 @@ export default function Chat() {
                 key={e.messege}
                 className={("messegeDiv", e.yes ? "yes" : "no")}
               >
-                <p className="messege">{e.messege}</p>
+                <p className="messege">
+                  {!e.yes ? <span className="name">{username}</span> : <></>}{" "}
+                  {e.messege}
+                </p>
               </div>
             );
           })}

@@ -30,20 +30,23 @@
   max-height: 150px;
   max-width: 150px;
   border-radius: 50%;
-  overflow: hidden;
   cursor: pointer;
   position: relative;
   aspect-ratio: 1 /1;
+  overflow: hidden;
 }
 
 .profileimage {
   height: 100%;
+  width: 100%;
+  border-radius: 50%;
   object-fit: cover;
 }
 
 .hover {
   height: 100%;
   width: 100%;
+  border-radius: 50%;
   background-color: rgba(0, 0, 0, 0.185);
   backdrop-filter: blur(2px);
   z-index: 3;
@@ -67,10 +70,14 @@
   opacity: 1;
 }
 .profileinputdiv {
-  max-height: 30%;
+  /* max-height: 30%; */
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  margin: 50px 0;
+  margin: 0;
+}
+.profileinputdiv input,
+.profileinputdiv textarea {
+  margin: 10px;
 }

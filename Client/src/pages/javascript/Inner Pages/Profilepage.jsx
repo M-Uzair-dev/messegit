@@ -41,6 +41,7 @@ export default function Profilepage(props) {
           type="text"
           id="text"
           baseColor="#f0f0f0"
+          margin="low"
         />
         <Input
           label="Username"
@@ -52,10 +53,12 @@ export default function Profilepage(props) {
           type="text"
           id="text"
           baseColor="#f0f0f0"
+          margin="low"
         />
         <Input
           label="About"
           value={about}
+          margin="low"
           onchange={(e) => {
             setAbout(e.target.value);
           }}
@@ -63,6 +66,7 @@ export default function Profilepage(props) {
           type="text"
           id="text"
           baseColor="#f0f0f0"
+          textarea="yes"
         />
       </div>
 

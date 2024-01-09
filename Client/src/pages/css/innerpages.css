@@ -37,6 +37,9 @@
   border-radius: 50%;
   cursor: pointer;
 }
+.InnerLeftTopBarRight img:hover {
+  filter: brightness(120%);
+}
 .settings {
   height: 100% !important;
   font-size: 1.5rem !important;
@@ -67,6 +70,9 @@
   align-items: center;
   justify-content: center;
 }
+.addbuttondiv:hover {
+  background-color: rgb(175, 175, 175);
+}
 .searchChatsDiv {
   border: 2px solid rgb(194, 194, 194);
   border-radius: 8px;
@@ -95,8 +101,15 @@
   max-width: 100%;
   max-height: calc(95vh - 140px);
   overflow-x: hidden;
-  /* overflow-y: scroll; */
   overflow-y: overlay;
+}
+@media (max-width: 650px) {
+  .cards {
+    max-width: 100%;
+    max-height: calc(100vh - 140px);
+    overflow-x: hidden;
+    overflow-y: overlay;
+  }
 }
 .card {
   height: 50px;
@@ -108,6 +121,9 @@
   justify-content: space-between;
   overflow: hidden;
   cursor: pointer;
+}
+.card:hover {
+  background-color: #7c63ec38;
 }
 .card > * {
   height: 100%;
@@ -136,6 +152,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.badge:hover {
+  background-color: #9a87ee;
 }
 .badge * {
   margin: 0;
@@ -272,7 +291,7 @@
   position: relative;
   z-index: 10;
 }
-.no p::before {
+.no > p::before {
   content: "";
   background-color: #7b63ec;
   height: 20px;
@@ -282,7 +301,7 @@
   left: -10px;
   z-index: 2;
 }
-.no p::after {
+.no > p::after {
   content: "";
   background-color: #f0f0f0;
   height: 40px;
@@ -294,7 +313,7 @@
   transform: translateX(-100%);
   z-index: 2;
 }
-.yes p::before {
+.yes > p::before {
   content: "";
   background-color: #9c08ff;
   height: 20px;
@@ -304,7 +323,7 @@
   right: -10px;
   z-index: 2;
 }
-.yes p::after {
+.yes > p::after {
   content: "";
   background-color: #f0f0f0;
   height: 40px;
@@ -358,4 +377,14 @@
   margin-right: 5px;
   font-size: 1.8rem;
   color: #591785;
+}
+
+.name {
+  margin: 0;
+  width: max-content;
+  font-size: 14px;
+  color: rgb(219, 219, 219);
+}
+.messege span {
+  display: block;
 }

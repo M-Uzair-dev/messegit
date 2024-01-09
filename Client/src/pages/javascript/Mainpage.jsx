@@ -4,7 +4,7 @@ import "../css/mainpage.css";
 import Chat from "./Inner Pages/Chat";
 import Chats from "./Inner Pages/chats";
 import Button from "../../components/javascript/Button";
-import AddUser from "./Inner Pages/AddUser";
+import AddUser from "./Inner Pages/SearchUser";
 import CreateGroup from "./Inner Pages/CreateGroup";
 import Profilepage from "./Inner Pages/Profilepage";
 import CloseIcon from "@mui/icons-material/Close";

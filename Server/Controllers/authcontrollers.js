@@ -44,7 +44,18 @@ module.exports.login = async (req, res, next) => {
 
 module.exports.signup = async (req, res, next) => {
   try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const { username, password } = req.body;
+
+    const existingUser = await userModel.findOne({ username });
+
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        errorMessage: "Username already exists. Please choose a different one.",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await userModel.create({
       ...req.body,
