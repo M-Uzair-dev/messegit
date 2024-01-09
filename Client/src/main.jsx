@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import App from "./App";
+import "./main.css";
 import Signup from "./pages/javascript/Auth/Signup";
 import Login from "./pages/javascript/Auth/Login";
 import Mainpage from "./pages/javascript/Mainpage";

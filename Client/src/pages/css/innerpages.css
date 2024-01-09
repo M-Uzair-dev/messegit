@@ -1,0 +1,361 @@
+.leftMainContainer {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  position: relative;
+  font-family: "Poppins", sans-serif;
+}
+.LeftTopBar {
+  width: 100%;
+  height: 70px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(231, 231, 231);
+}
+.InnerLeftTopBar {
+  height: 70%;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.InnerLeftTopBar > img {
+  height: 100%;
+  border-radius: 50%;
+}
+.InnerLeftTopBarRight {
+  height: 100%;
+  width: auto;
+}
+.InnerLeftTopBarRight * {
+  height: 100%;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.settings {
+  height: 100% !important;
+  font-size: 1.5rem !important;
+  margin: 0 15px;
+  cursor: pointer;
+}
+
+/* ______________________________________ */
+
+.optionbar {
+  height: 50px;
+  background: transparent;
+  border-bottom: 1px solid rgb(182, 182, 182);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+}
+.addbuttondiv {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: rgb(187, 187, 187);
+  color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.searchChatsDiv {
+  border: 2px solid rgb(194, 194, 194);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 70%;
+}
+.searchChatsDiv input {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  height: 35px;
+  font-size: 17px;
+  margin-left: 10px;
+  max-width: 70%;
+  font-family: "Poppins", sans-serif;
+}
+.searchChatsDiv *:not(input) {
+  margin-right: 10px;
+  cursor: pointer;
+  font-size: 1.8rem !important;
+  color: rgb(63, 63, 63);
+}
+.cards {
+  max-width: 100%;
+  max-height: calc(95vh - 140px);
+  overflow-x: hidden;
+  /* overflow-y: scroll; */
+  overflow-y: overlay;
+}
+.card {
+  height: 50px;
+  background: transparent;
+  border-bottom: 1px solid rgb(182, 182, 182);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  cursor: pointer;
+}
+.card > * {
+  height: 100%;
+}
+.cardleftdiv {
+  max-width: 60%;
+  display: flex;
+  align-items: center;
+}
+.cardleftdiv div * {
+  margin: 0 0 0 10px;
+}
+.cardleftdiv img {
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid #7b63ec;
+}
+.badge {
+  height: 30px !important;
+  padding: 0;
+  width: 30px;
+  background-color: #7b63ec;
+  color: white;
+  text-align: center;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.badge * {
+  margin: 0;
+}
+.cardleftdiv div {
+  max-width: 100%;
+}
+.cardleftdiv div p {
+  color: rgb(59, 59, 59);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cardleftdiv div h3 {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.active {
+  background-color: #a6b7df;
+}
+.active img {
+  border: 2px solid #9c08ff;
+}
+.blurDiv {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  backdrop-filter: blur(2px);
+  background-color: rgba(0, 0, 0, 0.514);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.add {
+  height: auto;
+  width: 80%;
+  background-color: rgb(192, 192, 192);
+  padding: 40px 20px 20px 20px;
+  border-radius: 10px;
+  z-index: 100;
+  position: relative;
+}
+.closeicon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+/*           ________________Left side css done________________                */
+.rightpage {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+.rightSideTopBar {
+  height: 50px;
+  background-color: rgb(218, 218, 218);
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.rightSideTopBar * {
+  height: 100%;
+}
+.barleftdiv {
+  display: flex;
+  align-items: center;
+}
+.barleftdiv > img {
+  border-radius: 50%;
+  border: 2px solid #9c08ff;
+}
+.barleftdiv > div > h3 {
+  height: min-content;
+  margin: 0 0 0 10px;
+  font-weight: 500;
+}
+.barleftdiv > div > p {
+  height: min-content;
+  margin: 0 0 0 10px;
+  color: rgb(73, 73, 73);
+}
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+.dotsicon {
+  cursor: pointer;
+  font-size: 2rem !important;
+}
+.messeges {
+  max-width: 100%;
+  padding: 10px;
+  max-height: calc(95vh - 90px);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  border-bottom: inset 1px solid red;
+}
+.messegeDiv {
+  max-width: 100%;
+  display: flex;
+  margin: 5px 0;
+  padding: 5px;
+}
+.messege {
+  padding: 5px 8px;
+  margin: 10px 0 0 0;
+  width: max-content;
+  max-width: 40%;
+  border-radius: 10px;
+  color: white;
+  box-sizing: border-box;
+}
+.yes {
+  display: flex;
+  justify-content: flex-end;
+}
+.yes p {
+  background-color: #9c08ff;
+  position: relative;
+
+  z-index: 10;
+}
+.no p {
+  background-color: #7b63ec;
+  position: relative;
+  z-index: 10;
+}
+.no p::before {
+  content: "";
+  background-color: #7b63ec;
+  height: 20px;
+  width: 17px;
+  position: absolute;
+  top: 0;
+  left: -10px;
+  z-index: 2;
+}
+.no p::after {
+  content: "";
+  background-color: #f0f0f0;
+  height: 40px;
+  width: 17px;
+  border-radius: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(-100%);
+  z-index: 2;
+}
+.yes p::before {
+  content: "";
+  background-color: #9c08ff;
+  height: 20px;
+  width: 17px;
+  position: absolute;
+  top: 0;
+  right: -10px;
+  z-index: 2;
+}
+.yes p::after {
+  content: "";
+  background-color: #f0f0f0;
+  height: 40px;
+  width: 17px;
+  border-radius: 20px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(100%);
+  z-index: 2;
+}
+.messegesDiv {
+  margin: 0 0 90px 0;
+}
+.inputTabParent {
+  position: absolute;
+  bottom: 10px;
+  width: 98%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inputTab {
+  background-color: #c778f83f;
+  border: 2px solid #8a4eb3;
+  backdrop-filter: blur(1px);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 50px;
+  /* width: 90%; */
+  height: 60px;
+  width: 10000px;
+  max-width: 90%;
+}
+.inputTab input {
+  height: 100%;
+  margin-left: 10px;
+  font-size: 18px;
+  font-family: "Poppins", sans-serif;
+  width: 80%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #50276b;
+}
+.inputTab *:not(input) {
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 1.8rem;
+  color: #591785;
+}

@@ -2,19 +2,28 @@ import React, { useState } from "react";
 import "../css/input.css";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 const Input = (props) => {
   const [showpass, setShowpass] = useState(false);
   return (
     <div className="input">
-      <label htmlFor={props.type}>{props.label}</label>
+      <label
+        style={props.baseColor ? { background: props.baseColor } : {}}
+        htmlFor={props.type}
+      >
+        {props.label}
+      </label>
       <input
         value={props.value}
         onChange={(event) => props.onchange(event)}
         placeholder={props.placeholder}
         id={props.id}
         type={showpass ? "text" : props.type}
-        style={props.type === "password" ? { width: "80%" } : { width: "90%" }}
+        style={
+          (props.type === "password" ? { width: "80%" } : { width: "90%" },
+          props.baseColor ? { background: props.baseColor } : {})
+        }
       />
       {props.type === "password" ? (
         <div
@@ -28,6 +37,8 @@ const Input = (props) => {
             <VisibilityOffIcon className="icon" />
           )}
         </div>
+      ) : props.search === "true" ? (
+        <SearchRoundedIcon className="icon" />
       ) : (
         <></>
       )}

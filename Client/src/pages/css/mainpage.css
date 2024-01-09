@@ -1,0 +1,47 @@
+.main {
+  background: linear-gradient(to top right, #8778cb, #4ca6c7);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.MainLeftCont {
+  height: 95vh;
+  width: 29%;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  max-width: 500px;
+  min-width: 300px;
+  overflow: hidden;
+  margin-right: 5px;
+  position: relative;
+}
+.MainRightCont {
+  height: 95vh;
+  overflow: hidden;
+  width: 68%;
+  background-color: #f0f0f0;
+  position: relative;
+  border-radius: 8px;
+}
+@media (max-width: 650px) {
+  .main {
+    padding: 0px;
+  }
+  .MainRightCont {
+    display: none;
+  }
+  .MainLeftCont {
+    width: 100%;
+    max-width: none;
+    min-width: 0px;
+    height: 100%;
+    margin: 0;
+    border-radius: 0px;
+  }
+}

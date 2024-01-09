@@ -11,6 +11,7 @@
   padding: 5px;
   margin: 10px 0;
   margin-left: 20px;
+  max-width: 80%;
   outline: none;
 }
 .input label {
@@ -32,9 +33,4 @@
   transform: translateY(-50%);
   color: rgb(95, 95, 95);
   cursor: pointer;
-}
-@media (max-width: 400px) {
-  .input input {
-    max-width: 80%;
-  }
 }

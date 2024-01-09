@@ -9,7 +9,7 @@ const createToken = (id) => {
     return jwt.sign({ id }, process.env.SECRET_KEY, { expiresIn: maxAge });
   } catch (err) {
     console.error("Error creating JWT:", err);
-    throw err; // Rethrow for proper error handling
+    throw err;
   }
 };
 
@@ -22,7 +22,7 @@ module.exports.login = async (req, res, next) => {
       throw new Error("Invalid credentials");
     }
 
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
       throw new Error("Invalid credentials");
@@ -31,7 +31,14 @@ module.exports.login = async (req, res, next) => {
     res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
     res.status(200).json({ success: true });
   } catch (err) {
-    res.status(401).json({ success: false, errorMessage: err.message });
+    if (err.message === "Invalid credentials") {
+      res
+        .status(401)
+        .json({ success: false, errorMessage: "Invalid email or password" }); // Generalize error message
+    } else {
+      console.error("Login error:", err);
+      res.status(500).json({ error: "Internal server error" });
+    }
   }
 };
 
