@@ -74,8 +74,7 @@ const Signup = () => {
             });
           }
         } else {
-          navigate("/");
-          console.log(data);
+          navigate("/chats");
         }
       } catch (err) {
         enqueueSnackbar("An error occurred!", { variant: "error" });

@@ -4,7 +4,7 @@ import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../../Redux/Features/userSlice";
 
 export default function Protected() {
@@ -16,6 +16,7 @@ export default function Protected() {
 
   useEffect(() => {
     const validate = async () => {
+      console.log("Cookies Checked");
       try {
         if (!cookies.jwt) {
           navigate("/login");
@@ -49,6 +50,7 @@ export default function Protected() {
           about: data.user.about,
         };
         dispatch(setUser(temp));
+        navigate("/chats");
       } catch (error) {
         removeCookie("jwt");
         navigate("/login");

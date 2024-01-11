@@ -47,7 +47,7 @@ const Login = () => {
         });
 
         if (response.ok) {
-          navigate("/");
+          navigate("/chats");
         } else {
           enqueueSnackbar("Invalid Credentials", { variant: "error" });
         }

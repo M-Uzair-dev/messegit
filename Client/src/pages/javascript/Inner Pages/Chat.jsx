@@ -10,7 +10,7 @@ export default function Chat() {
     setMessege(e.target.value);
   };
   const chatContainerRef = useRef(null);
-  let username = "Uzair Manan";
+  let username = "@uzair-manan-224";
   const [messeges, setMesseges] = useState([
     { messege: "Hey", yes: false },
 
@@ -35,7 +35,11 @@ export default function Chat() {
 
     { messege: "Where do you want to meet ?", yes: true },
 
-    { messege: "Why don't you visit my house this sunday ?", yes: false },
+    {
+      messege:
+        "Why don't you visit my house this sunday ?Why don't you visit my house this sunday ?Why don't you visit my house this sunday ?Why don't you visit my house this sunday ?Why don't you visit my house this sunday ?Why don't you visit my house this sunday ?Why don't you visit my house this sunday ?Why don't you visit my house this sunday ?Why don't you visit my house this sunday ?Why don't you visit my house this sunday ?",
+      yes: false,
+    },
 
     { messege: "That'll be so fun and exciting.", yes: false },
 

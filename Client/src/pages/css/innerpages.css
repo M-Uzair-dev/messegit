@@ -259,7 +259,7 @@
   max-height: calc(95vh - 90px);
   overflow-x: hidden;
   overflow-y: scroll;
-  border-bottom: inset 1px solid red;
+  border-bottom: 1px solid red;
 }
 .messegeDiv {
   max-width: 100%;
@@ -387,4 +387,9 @@
 }
 .messege span {
   display: block;
+}
+@media (max-width: 500px) {
+  .messege {
+    max-width: 60%;
+  }
 }

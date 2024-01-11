@@ -29,6 +29,38 @@
   position: relative;
   border-radius: 8px;
 }
+.loadingpage {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.logoDiv {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  border-top: 1px solid #403ed6;
+  animation: spin 2s linear 0s infinite;
+}
+
+.logoDiv img {
+  height: 100%;
+  width: 100%;
+
+  animation: spin 2s linear 0s infinite reverse;
+}
+
 @media (max-width: 650px) {
   .main {
     padding: 0px;

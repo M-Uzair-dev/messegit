@@ -7,6 +7,7 @@ import Signup from "./pages/javascript/Auth/Signup";
 import Login from "./pages/javascript/Auth/Login";
 import Mainpage from "./pages/javascript/Mainpage";
 import Protected from "./pages/javascript/protected";
+import Load from "./pages/javascript/Load";
 
 const router = createBrowserRouter([
   {
@@ -15,21 +16,27 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Protected />,
+        element: <Load />,
         children: [
           {
             path: "/",
-            element: <Mainpage />,
+            element: <Protected />,
+            children: [
+              {
+                path: "/chats",
+                element: <Mainpage />,
+              },
+            ],
+          },
+          {
+            path: "/login",
+            element: <Login />,
+          },
+          {
+            path: "/signup",
+            element: <Signup />,
           },
         ],
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/signup",
-        element: <Signup />,
       },
     ],
   },
