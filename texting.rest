@@ -1,7 +1,0 @@
-POST http://localhost:5000/auth/validate
-Content-Type: "application/json"
-
-{
-    "email": "uzairmanan3@gmail.com",
-    "password":"killerboy576225762"
-}

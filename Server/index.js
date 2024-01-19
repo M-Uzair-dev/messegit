@@ -1,13 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const auth = require("./Routes/authroute");
+const authRoute = require("./Routes/authroute");
+const chatsRoute = require("./Routes/chatsroute");
 const cookieParser = require("cookie-parser");
+const bodyparser = require("body-parser");
 require("dotenv").config();
 
 const app = express();
-app.use(cookieParser());
-app.use(express.json());
 app.use(
   cors({
     credentials: true,
@@ -15,20 +15,21 @@ app.use(
   })
 );
 
+app.use(bodyparser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
 mongoose
   .connect(process.env.DATABASE_URL)
   .then(() => {
-    console.log("Database connected !");
+    console.log("Database connected!");
   })
   .catch((err) => {
-    console.log("database connection error : " + err);
+    console.log("Database connection error: " + err);
   });
 
-app.get("/", (req, res) => {
-  res.send("Welcome to MesseGit API");
-});
-
-app.use("/auth", auth);
+app.use("/chats", chatsRoute);
+app.use("/auth", authRoute);
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");

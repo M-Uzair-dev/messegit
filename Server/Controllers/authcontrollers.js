@@ -8,7 +8,6 @@ const createToken = (id) => {
   try {
     return jwt.sign({ id }, process.env.SECRET_KEY, { expiresIn: maxAge });
   } catch (err) {
-    console.error("Error creating JWT:", err);
     throw err;
   }
 };
@@ -36,7 +35,6 @@ module.exports.login = async (req, res, next) => {
         .status(401)
         .json({ success: false, errorMessage: "Invalid email or password" }); // Generalize error message
     } else {
-      console.error("Login error:", err);
       res.status(500).json({ error: "Internal server error" });
     }
   }
@@ -117,7 +115,6 @@ module.exports.deleteUser = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "User deleted successfully" });
   } catch (err) {
-    console.error("Delete user error:", err);
     res.status(400).json({ success: false, errorMessage: err.message });
   }
 };

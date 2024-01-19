@@ -26,13 +26,11 @@ module.exports.validateUser = async (req, res, next) => {
       req.user = user;
       res.status(200).json({ status: true, user });
     } catch (jwtError) {
-      console.error("JWT Error:", jwtError);
       return res
         .status(401)
         .json({ status: false, message: "Unauthorized: Invalid token" });
     }
   } catch (error) {
-    console.error("Internal Server Error:", error);
     res.status(500).json({ status: false, message: "Internal server error" });
   }
 };
