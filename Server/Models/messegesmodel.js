@@ -10,14 +10,14 @@ const messegeschema = new mongoose.Schema({
     required: true,
   },
   content: {
-    type: string,
+    type: String,
     required: true,
   },
   seenBy: [{ type: String }],
   createdAt: {
     type: Date,
-    default: () => new Date.now(),
+    default: () => new Date(),
   },
 });
 
-module.exports = mongoose.model("messeges", userSchema);
+module.exports = mongoose.model("messeges", messegeschema);

@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoute = require("./Routes/authroute");
 const chatsRoute = require("./Routes/chatsroute");
+const messagesroute = require("./Routes/messagesroute");
 const cookieParser = require("cookie-parser");
 const bodyparser = require("body-parser");
 require("dotenv").config();
@@ -30,6 +31,7 @@ mongoose
 
 app.use("/chats", chatsRoute);
 app.use("/auth", authRoute);
+app.use("/messages", messagesroute);
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
