@@ -91,6 +91,11 @@
   max-width: 70%;
   font-family: "Poppins", sans-serif;
 }
+.noresults {
+  text-align: center;
+  width: 100%;
+  margin-top: 25%;
+}
 .searchChatsDiv *:not(input) {
   margin-right: 10px;
   cursor: pointer;
@@ -98,7 +103,7 @@
   color: rgb(63, 63, 63);
 }
 .cards {
-  max-width: 100%;
+  width: 100%;
   max-height: calc(95vh - 140px);
   overflow-x: hidden;
   overflow-y: overlay;
@@ -392,4 +397,11 @@
   .messege {
     max-width: 60%;
   }
+}
+.LoaderContainer {
+  width: 100%;
+  height: calc(95vh - 140px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

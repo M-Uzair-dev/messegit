@@ -18,25 +18,22 @@ module.exports.login = async (req, res, next) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      throw new Error("Invalid credentials");
+      throw new Error("Invalid email or password");
     }
 
-    const passwordMatch = bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new Error("Invalid credentials");
+      throw new Error("Invalid email or password");
     }
+
     const token = createToken(user._id);
     res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
     res.status(200).json({ success: true });
   } catch (err) {
-    if (err.message === "Invalid credentials") {
-      res
-        .status(401)
-        .json({ success: false, errorMessage: "Invalid email or password" }); // Generalize error message
-    } else {
-      res.status(500).json({ error: "Internal server error" });
-    }
+    res
+      .status(401)
+      .json({ success: false, errorMessage: "Invalid email or password" });
   }
 };
 
@@ -115,6 +112,26 @@ module.exports.deleteUser = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "User deleted successfully" });
   } catch (err) {
+    res.status(400).json({ success: false, errorMessage: err.message });
+  }
+};
+
+module.exports.findUsers = async (req, res) => {
+  try {
+    const username = req.body.username;
+
+    const user = await userModel.findOne({
+      username: { $regex: username, $options: "i" },
+    });
+
+    if (!user) {
+      res.status(200).json({ NoUser: true });
+      return;
+    }
+    const userobject = [user];
+    res.status(200).json({ userobject });
+  } catch (err) {
+    console.log(err);
     res.status(400).json({ success: false, errorMessage: err.message });
   }
 };

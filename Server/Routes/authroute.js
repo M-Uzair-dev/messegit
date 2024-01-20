@@ -5,6 +5,7 @@ const {
   signup,
   editUser,
   deleteUser,
+  findUsers,
 } = require("../Controllers/authcontrollers");
 const { validateUser } = require("../Middleware/validateUser");
 
@@ -16,4 +17,6 @@ router.post("/signup", signup); // http://localhost:5000/auth/signup
 router.patch("/update/:id", editUser); // http://localhost:5000/auth/update/dfdklsfh278912767465
 router.delete("/delete/:id", deleteUser); // http://localhost:5000/auth/delete/Sdfkqow76qwurjearo7
 router.post("/validate", validateUser); // http://localhost:5000/auth/validate
+
+router.post("/find", findUsers); // http://localhost:5000/auth/find
 module.exports = router;

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-// import { useSelector } from "react-redux";
 import "../css/mainpage.css";
 import Chat from "./Inner Pages/Chat";
-import Chats from "./Inner Pages/chats";
+import Chats from "./Inner Pages/Chats";
 import Button from "../../components/javascript/Button";
 import AddUser from "./Inner Pages/SearchUser";
 import CreateGroup from "./Inner Pages/CreateGroup";
@@ -15,7 +14,6 @@ export default function Mainpage() {
   const [showCreateGroupPage, setShowCreateGroupPage] = useState(false);
 
   const [showProfilePage, setShowProfilePage] = useState(false);
-  // const user = useSelector((state) => state.user);
 
   return (
     <div className="main">

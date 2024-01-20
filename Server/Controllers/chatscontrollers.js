@@ -1,4 +1,5 @@
 const chatModel = require("../Models/chatsmodel");
+const usermodel = require("../Models/usermodel");
 
 module.exports.getchats = async (req, res) => {
   try {
@@ -34,8 +35,14 @@ module.exports.createchat = async (req, res, next) => {
       error: "Both members are required.",
     });
   }
-
   try {
+    let user = await usermodel.findById(member1);
+    if (!user) {
+      res.status(400).json({
+        success: false,
+        error: "Member is not valid",
+      });
+    }
     let existingChat = await chatModel.findOne({
       members: { $all: [member1, member2] },
       isGroup: false,
@@ -49,7 +56,7 @@ module.exports.createchat = async (req, res, next) => {
     }
 
     const membersArray = [member1, member2];
-    const chat = new chatModel({ members: membersArray });
+    const chat = new chatModel({ members: membersArray, name: user.name });
     await chat.save();
 
     return res.status(201).json({
@@ -57,6 +64,7 @@ module.exports.createchat = async (req, res, next) => {
       data: { chatId: chat._id },
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).send("Server Error");
   }
 };

@@ -16,6 +16,9 @@ const chatSchema = new mongoose.Schema({
   admin: {
     type: String,
   },
+  imageurl: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("Chat", chatSchema);
