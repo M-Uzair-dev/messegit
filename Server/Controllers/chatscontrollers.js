@@ -29,12 +29,13 @@ module.exports.createchat = async (req, res, next) => {
   const member1 = req.body.member1;
   const member2 = req.body.member2;
 
-  if (!member1 || !member2) {
+  if (!member1 || !member2 || member1 === member2) {
     return res.status(400).json({
       success: false,
       error: "Both members are required.",
     });
   }
+
   try {
     let user = await usermodel.findById(member1);
     if (!user) {

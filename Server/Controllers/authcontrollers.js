@@ -119,19 +119,22 @@ module.exports.deleteUser = async (req, res, next) => {
 module.exports.findUsers = async (req, res) => {
   try {
     const username = req.body.username;
+    const usersname = req.body.usersname;
 
-    const user = await userModel.findOne({
+    const tempusers = await userModel.find({
       username: { $regex: username, $options: "i" },
     });
 
-    if (!user) {
+    if (tempusers.length === 0) {
       res.status(200).json({ NoUser: true });
       return;
     }
-    const userobject = [user];
-    res.status(200).json({ userobject });
+
+    const users = tempusers.filter((e) => !e.username.includes(usersname));
+
+    res.status(200).json({ users });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     res.status(400).json({ success: false, errorMessage: err.message });
   }
 };

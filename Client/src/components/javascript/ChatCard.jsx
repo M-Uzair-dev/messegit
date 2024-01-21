@@ -1,10 +1,16 @@
 import React from "react";
 import "../../pages/css/innerpages.css";
 
-export default function ChatCard({ pfp, name, message, nowrap }) {
+export default function ChatCard({ pfp, name, message, nowrap, onclick }) {
   return (
     <div>
-      <div className="card" style={nowrap ? { width: "100%" } : {}}>
+      <div
+        onClick={() => {
+          onclick ? onclick() : null;
+        }}
+        className="card"
+        style={nowrap ? { width: "100%" } : {}}
+      >
         <div className="cardleftdiv">
           <img src={pfp} alt="user image" />
           <div>

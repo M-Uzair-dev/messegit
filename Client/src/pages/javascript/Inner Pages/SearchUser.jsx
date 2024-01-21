@@ -5,12 +5,45 @@ import ChatCard from "../../../components/javascript/ChatCard";
 import pfp from "../../../images/userpfp.jpg";
 import "../../css/pages.css";
 import { TailSpin } from "react-loader-spinner";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function SearchUser(props) {
   const [data, setData] = useState([]);
   const [noresults, setNoresults] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [inputval, setInputval] = useState("");
+  const [inputval, setInputval] = useState("@");
+  const user = useSelector((state) => state.user);
+  const navigate = useNavigate();
+
+  const createChat = async (id) => {
+    try {
+      console.log("fc called");
+      const res = await fetch("http://localhost:5000/chats/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          member1: id,
+          member2: user.id,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
+      const data = await res.json();
+
+      console.log(data);
+      if (data.success === true) {
+        window.location.reload();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     if (inputval === "") {
@@ -27,6 +60,7 @@ export default function SearchUser(props) {
           },
           body: JSON.stringify({
             username: inputval,
+            usersname: user.username,
           }),
         });
 
@@ -42,8 +76,8 @@ export default function SearchUser(props) {
           setLoading(false);
           return;
         }
-
-        setData(result.userobject);
+        console.log(result);
+        setData(result.users);
         setLoading(false);
       } catch (e) {
         setLoading(false);
@@ -111,6 +145,9 @@ export default function SearchUser(props) {
               name={e.username || "User's name"}
               message={""}
               nowrap={true}
+              onclick={() => {
+                createChat(e._id);
+              }}
             />
           ))
         )}

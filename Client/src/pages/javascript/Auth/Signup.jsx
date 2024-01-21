@@ -17,10 +17,15 @@ const Signup = () => {
   const [finaldata, setFinaldata] = useState({
     email: "",
     password: "",
-    username: "",
+    username: "@",
     name: "",
     about: "",
   });
+  function hasEmail(text) {
+    const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/;
+
+    return emailPattern.test(text);
+  }
 
   useEffect(() => {
     if (cookies.jwt) {
@@ -49,6 +54,11 @@ const Signup = () => {
       try {
         if (finaldata.about === "") {
           finaldata.about = "The user has no about text.";
+        }
+        if (!finaldata.username.startsWith("@")) {
+          finaldata.username = `@${finaldata.username.replace(" ", "")}`;
+        } else {
+          finaldata.username.replace(" ", "");
         }
 
         const response = await fetch("http://localhost:5000/auth/signup", {
@@ -86,8 +96,12 @@ const Signup = () => {
     try {
       if (data.email === "") {
         enqueueSnackbar("Email is required", { variant: "error" });
+      } else if (!hasEmail(data.email)) {
+        enqueueSnackbar("Please enter a valid Email.", { variant: "error" });
       } else if (data.password === "") {
         enqueueSnackbar("Password is required", { variant: "error" });
+      } else if (data.password.length <= 5) {
+        enqueueSnackbar("Parword is too short.", { variant: "error" });
       } else {
         console.log(data.email);
         const response = await fetch("http://localhost:5000/auth/check", {
@@ -124,7 +138,7 @@ const Signup = () => {
 
         <Input
           label="Username"
-          placeholder="Enter a unique username"
+          placeholder="create a username"
           type="text"
           value={finaldata.username}
           onchange={handlefinalchange}
