@@ -18,7 +18,7 @@ export default function SearchUser(props) {
 
   const createChat = async (id) => {
     try {
-      console.log("fc called");
+      console.log("Function called");
       const res = await fetch("http://localhost:5000/chats/new", {
         method: "POST",
         headers: {
@@ -36,12 +36,14 @@ export default function SearchUser(props) {
 
       const data = await res.json();
 
-      console.log(data);
-      if (data.success === true) {
-        window.location.reload();
+      if (data && data.success === true) {
+        // Make sure data.data is a string before navigating
+        const redirectUrl = String(data.data);
+        navigate(`/chats/${redirectUrl}`);
+        props.off();
       }
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   };
 

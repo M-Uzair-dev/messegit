@@ -3,12 +3,18 @@ import React, { useRef, useEffect, useState } from "react";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import pfp from "../../../images/userpfp.jpg";
 import SendIcon from "@mui/icons-material/Send";
+import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function Chat() {
+export default function Chat(props) {
   const [messege, setMessege] = useState("");
+  const [showdrop, setShowdrop] = useState(false);
   const handleChange = (e) => {
     setMessege(e.target.value);
   };
+  const refresh = localStorage.getItem("refresh");
+  const { id } = useParams();
+  const navigate = useNavigate();
   const chatContainerRef = useRef(null);
   let username = "@uzair-manan-224";
   const [messeges, setMesseges] = useState([
@@ -63,6 +69,31 @@ export default function Chat() {
   let addMessege = () => {
     setMesseges([...messeges, { messege, yes: true }]);
   };
+
+  let deletechat = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/chats/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chatID: id,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const result = await res.json();
+      if (result.success === true) {
+        navigate("/chats");
+        if (refresh === "true") localStorage.setItem("refresh", false);
+        else localStorage.setItem("refresh", true);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <div className="rightpage">
       <div className="rightSideTopBar">
@@ -74,7 +105,34 @@ export default function Chat() {
           </div>
         </div>
         <div className="dots">
-          <MoreVertIcon className="dotsicon" />
+          {showdrop ? (
+            <>
+              <CloseIcon
+                className="dotsicon"
+                onClick={() => {
+                  setShowdrop(false);
+                }}
+              />
+              <div className="dropmenu">
+                <p
+                  onClick={() => {
+                    deletechat();
+                  }}
+                >
+                  Delete Chat
+                </p>
+                <p>Block User</p>
+                <p>Report User</p>
+              </div>
+            </>
+          ) : (
+            <MoreVertIcon
+              onClick={() => {
+                setShowdrop(true);
+              }}
+              className="dotsicon"
+            />
+          )}
         </div>
       </div>
       <div className="messeges" ref={chatContainerRef}>

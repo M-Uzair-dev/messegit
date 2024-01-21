@@ -8,11 +8,14 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ChatCard from "../../../components/javascript/ChatCard";
 import { useSelector } from "react-redux";
 import { TailSpin } from "react-loader-spinner";
+import { useNavigate } from "react-router-dom";
 
 export default function Chats(props) {
   const [data, setData] = useState([]);
   const [noChats, setNochats] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  let refresh = localStorage.getItem("refresh");
 
   const user = useSelector((state) => state.user);
   useEffect(() => {
@@ -34,7 +37,6 @@ export default function Chats(props) {
         }
 
         const result = await res.json();
-        console.log(result);
 
         if (result.message === "No chats found" || result.chats.length === 0) {
           setLoading(false);
@@ -43,7 +45,16 @@ export default function Chats(props) {
           if (result.success === false) {
             throw new Error("An unexpected error occurred!");
           } else {
-            setData(result.chats);
+            let updated = await result.chats.map((chat) => {
+              // Assuming chat.data is an array
+              let updatedData = chat.data.filter(
+                (userObj) => userObj.id !== user.id
+              );
+              return { ...chat, data: updatedData };
+            });
+            console.log(updated);
+
+            setData(updated);
             setLoading(false);
           }
         }
@@ -54,7 +65,7 @@ export default function Chats(props) {
     };
 
     fetchData();
-  }, [user.id]);
+  }, [user.id, props, refresh]);
 
   return (
     <div className="leftMainContainer">
@@ -100,15 +111,21 @@ export default function Chats(props) {
             wrapperClass=""
           />
         </div>
+      ) : noChats ? (
+        <>
+          <p className="noresults">No Chats yet.</p>
+        </>
       ) : (
         <div className="cards">
           {data.map((e) => {
             return (
               <ChatCard
                 key={e._id}
-                pfp={e.pfp || pfp}
-                name={e.name || "User's name"}
-                message={e.message || "Latest message"}
+                pfp={e.data[0].imageurl || pfp}
+                name={e.data[0].name || "User's name"}
+                onclick={() => {
+                  navigate(`/chats/${e._id}`);
+                }}
               />
             );
           })}

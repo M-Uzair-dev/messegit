@@ -50,7 +50,6 @@ export default function Protected() {
           about: data.user.about,
         };
         dispatch(setUser(temp));
-        navigate("/chats");
       } catch (error) {
         removeCookie("jwt");
         navigate("/login");

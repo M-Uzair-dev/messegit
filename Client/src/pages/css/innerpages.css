@@ -405,3 +405,33 @@
   align-items: center;
   justify-content: center;
 }
+.dropmenu {
+  background-color: #b99aeb;
+  height: max-content;
+  position: absolute;
+  right: 0;
+  top: 70px;
+  width: max-content;
+  border-radius: 5px;
+  z-index: 1000000000000000000000000000000000;
+  overflow: hidden;
+  /* display: none; */
+}
+.dropmenu p {
+  padding: 15px 20px;
+  margin: 0;
+  background-color: #b99aeb;
+  height: 20px;
+  cursor: pointer;
+  font-weight: 400;
+  text-align: center;
+}
+.dropmenu p:first-of-type {
+  padding-top: 18px;
+}
+.dropmenu p:last-of-type {
+  padding-bottom: 18px;
+}
+.dropmenu p:hover {
+  background-color: #bfa9e2;
+}

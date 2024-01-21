@@ -15,7 +15,7 @@ export default function ChatCard({ pfp, name, message, nowrap, onclick }) {
           <img src={pfp} alt="user image" />
           <div>
             <h3>{name}</h3>
-            <p>{message}</p>
+            <p>Hello!</p>
           </div>
         </div>
         {/* <div className="badge">

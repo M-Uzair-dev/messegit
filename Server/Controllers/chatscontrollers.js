@@ -38,7 +38,8 @@ module.exports.createchat = async (req, res, next) => {
 
   try {
     let user = await usermodel.findById(member1);
-    if (!user) {
+    let user2 = await usermodel.findById(member2);
+    if (!user || !user2) {
       res.status(400).json({
         success: false,
         error: "Member is not valid",
@@ -55,9 +56,22 @@ module.exports.createchat = async (req, res, next) => {
         data: existingChat._id,
       });
     }
+    console.log(user + "||||||" + user2);
+    let data = [
+      {
+        id: member1,
+        name: user.name,
+        imageurl: user.imageurl,
+      },
+      {
+        id: member2,
+        name: user2.name,
+        imageurl: user2.imageurl,
+      },
+    ];
 
     const membersArray = [member1, member2];
-    const chat = new chatModel({ members: membersArray, name: user.name });
+    const chat = new chatModel({ members: membersArray, data });
     await chat.save();
 
     return res.status(201).json({

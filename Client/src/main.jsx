@@ -25,6 +25,13 @@ const router = createBrowserRouter([
               {
                 path: "/chats",
                 element: <Mainpage />,
+                children: [
+                  {
+                    // Add a dynamic route parameter for id
+                    path: "/chats/:id",
+                    element: <Mainpage />,
+                  },
+                ],
               },
             ],
           },
@@ -41,6 +48,8 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+localStorage.setItem("refresh", false);
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
 );
