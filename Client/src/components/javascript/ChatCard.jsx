@@ -1,7 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../pages/css/innerpages.css";
+import { useSelector } from "react-redux";
 
-export default function ChatCard({ pfp, name, message, nowrap, onclick }) {
+export default function ChatCard({ pfp, name, message, id, nowrap, onclick }) {
+  const [count, setcount] = useState(0);
+
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    const getCount = async () => {
+      try {
+        if (!user.id || !id) return;
+
+        const res = await fetch("http://localhost:5000/messages/getcount", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chatId: id,
+            userId: user.id,
+          }),
+        });
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+
+        const result = await res.json();
+
+        if (result.success === false) {
+          if (result.message === "No messages found") {
+            return;
+          }
+          throw new Error("An unexpected error occurred!");
+        } else {
+          setcount(result.newMessageCount);
+          console.log(result);
+        }
+      } catch (e) {
+        console.log(e);
+        enqueueSnackbar("An error occured.", { variant: "error" });
+      }
+    };
+    getCount();
+  }, []);
   return (
     <div>
       <div
@@ -15,12 +57,18 @@ export default function ChatCard({ pfp, name, message, nowrap, onclick }) {
           <img src={pfp} alt="user image" />
           <div>
             <h3>{name}</h3>
-            <p>Hello!</p>
+            <p>{message}</p>
           </div>
         </div>
-        {/* <div className="badge">
-          <p>3</p>
-        </div> */}
+        {count === 0 ? (
+          <></>
+        ) : count ? (
+          <div className="badge">
+            <p>{count}</p>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

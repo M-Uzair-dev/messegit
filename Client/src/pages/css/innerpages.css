@@ -264,7 +264,6 @@
   max-height: calc(95vh - 90px);
   overflow-x: hidden;
   overflow-y: scroll;
-  border-bottom: 1px solid red;
 }
 .messegeDiv {
   max-width: 100%;
@@ -425,6 +424,7 @@
   cursor: pointer;
   font-weight: 400;
   text-align: center;
+  color: white;
 }
 .dropmenu p:first-of-type {
   padding-top: 18px;
@@ -434,4 +434,17 @@
 }
 .dropmenu p:hover {
   background-color: #bfa9e2;
+}
+.chatlogo {
+  height: 200px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+}
+.link {
+  text-decoration: underline;
+  color: rgb(0, 119, 255);
+  cursor: pointer;
 }

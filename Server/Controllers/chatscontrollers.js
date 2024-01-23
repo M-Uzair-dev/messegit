@@ -56,7 +56,6 @@ module.exports.createchat = async (req, res, next) => {
         data: existingChat._id,
       });
     }
-    console.log(user + "||||||" + user2);
     let data = [
       {
         id: member1,

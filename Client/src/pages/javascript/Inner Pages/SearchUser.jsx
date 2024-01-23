@@ -7,14 +7,17 @@ import "../../css/pages.css";
 import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 export default function SearchUser(props) {
   const [data, setData] = useState([]);
   const [noresults, setNoresults] = useState(true);
   const [loading, setLoading] = useState(true);
-  const [inputval, setInputval] = useState("@");
+  const [inputval, setInputval] = useState("");
   const user = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const refresh = localStorage.getItem("refresh");
+  const { enqueueSnackbar } = useSnackbar();
 
   const createChat = async (id) => {
     try {
@@ -36,14 +39,17 @@ export default function SearchUser(props) {
 
       const data = await res.json();
 
-      if (data && data.success === true) {
-        // Make sure data.data is a string before navigating
-        const redirectUrl = String(data.data);
+      if (data.data && data.success === true) {
+        const redirectUrl = String(data.data.chatId);
+        if (refresh === "true") localStorage.setItem("refresh", false);
+        else localStorage.setItem("refresh", true);
         navigate(`/chats/${redirectUrl}`);
+        enqueueSnackbar("Chat added.", { variant: "success" });
         props.off();
       }
     } catch (e) {
       console.error(e);
+      enqueueSnackbar("An error occured.", { variant: "error" });
     }
   };
 

@@ -1,4 +1,6 @@
+const chatsmodel = require("../Models/chatsmodel");
 const messegesModel = require("../Models/messegesmodel");
+const usermodel = require("../Models/usermodel");
 
 module.exports.getmesseges = async (req, res) => {
   try {
@@ -9,7 +11,11 @@ module.exports.getmesseges = async (req, res) => {
     }
 
     const messages = await messegesModel.find({ chatID });
-
+    const user = await usermodel.findById(userID);
+    const chat = await chatsmodel.findById(chatID);
+    if (!user || !chat) {
+      return res.status(500).json({ success: false, message: "User invalid" });
+    }
     if (messages && messages.length > 0) {
       const updatedMessages = messages.map((message) => {
         if (!message.seenBy.includes(userID)) {
@@ -33,6 +39,24 @@ module.exports.getmesseges = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+module.exports.getNewMessagesCount = async (req, res) => {
+  try {
+    const chatID = req.body.chatId;
+    const userID = req.body.userId;
+    const messages = await messegesModel.find({ chatID: chatID });
+    let count = 0;
+    for (let i = 0; i < messages.length; i++) {
+      if (!messages[i].seenBy.includes(userID)) {
+        count++;
+      }
+    }
+    return res.status(200).json({ newMessageCount: count });
+  } catch (e) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
 
 module.exports.createmessege = async (req, res, next) => {
   const chatID = req.body.chatID;
@@ -47,7 +71,17 @@ module.exports.createmessege = async (req, res, next) => {
   }
 
   try {
-    const messege = new messegesModel({ chatID, senderID: userID, content });
+    const user = await usermodel.findById(userID);
+    const chat = await chatsmodel.findById(chatID);
+    if (!user || !chat) {
+      return res.status(500).json({ success: false, message: "User invalid" });
+    }
+    const messege = new messegesModel({
+      chatID,
+      senderID: userID,
+      content,
+      seenBy: [userID],
+    });
     await messege.save();
 
     return res.status(201).json({
@@ -55,7 +89,7 @@ module.exports.createmessege = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).send("Server Error");
+    return res.status(500).json({ success: false, message: "server error" });
   }
 };
 

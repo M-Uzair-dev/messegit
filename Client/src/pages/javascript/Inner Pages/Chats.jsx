@@ -20,6 +20,7 @@ export default function Chats(props) {
   const user = useSelector((state) => state.user);
   useEffect(() => {
     const fetchData = async () => {
+      setNochats(false);
       try {
         if (!user.id) return;
 
@@ -65,7 +66,7 @@ export default function Chats(props) {
     };
 
     fetchData();
-  }, [user.id, props, refresh]);
+  }, [user.id, refresh]);
 
   return (
     <div className="leftMainContainer">
@@ -113,7 +114,19 @@ export default function Chats(props) {
         </div>
       ) : noChats ? (
         <>
-          <p className="noresults">No Chats yet.</p>
+          <p className="noresults">
+            No Chats yet.
+            <br /> Please{" "}
+            <a
+              className="link"
+              onClick={() => {
+                props.showadddiv();
+              }}
+            >
+              Add Chat
+            </a>{" "}
+            to start chatting.
+          </p>
         </>
       ) : (
         <div className="cards">
@@ -123,6 +136,7 @@ export default function Chats(props) {
                 key={e._id}
                 pfp={e.data[0].imageurl || pfp}
                 name={e.data[0].name || "User's name"}
+                id={e._id}
                 onclick={() => {
                   navigate(`/chats/${e._id}`);
                 }}
