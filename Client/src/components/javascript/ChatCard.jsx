@@ -2,16 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../../pages/css/innerpages.css";
 import { useSelector } from "react-redux";
 
-export default function ChatCard({
-  pfp,
-  name,
-  message,
-  id,
-  nowrap,
-  onclick,
-  isGroup,
-}) {
+export default function ChatCard({ pfp, name, id, nowrap, onclick, isGroup }) {
   const [count, setcount] = useState(0);
+  const [latestMessage, setlatestMessage] = useState("");
 
   const user = useSelector((state) => state.user);
 
@@ -43,6 +36,7 @@ export default function ChatCard({
           throw new Error("An unexpected error occurred!");
         } else {
           setcount(result.newMessageCount);
+          setlatestMessage(result.latestMessage);
           console.log(result);
         }
       } catch (e) {
@@ -56,7 +50,6 @@ export default function ChatCard({
     <div>
       <div
         onClick={() => {
-          setcount(0);
           onclick ? onclick() : null;
         }}
         className={isGroup ? "group card" : "card"}
@@ -66,7 +59,7 @@ export default function ChatCard({
           <img src={pfp} alt="user image" />
           <div>
             <h3>{name}</h3>
-            <p>{message}</p>
+            <p>{latestMessage}</p>
           </div>
         </div>
         {count === 0 ? (

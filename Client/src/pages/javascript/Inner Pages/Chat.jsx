@@ -10,7 +10,7 @@ import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
-export default function Chat() {
+export default function Chat(props) {
   //------------------------------- Variables and Hooks --------------------------------------------
 
   const refresh = localStorage.getItem("refresh");
@@ -30,7 +30,6 @@ export default function Chat() {
   const [admin, setAdmin] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-
   // --------------------------------  UseEffects -----------------------------------------------
 
   useEffect(() => {
@@ -56,12 +55,10 @@ export default function Chat() {
         }
 
         const result = await res.json();
-        console.log(result.data);
 
         if (result.success === false) {
           if (result.message === "No messages found") {
             if (result.group) {
-              setIsGroup(result.group);
               setAdmin(result.admin);
             }
 
@@ -73,6 +70,7 @@ export default function Chat() {
               );
               setName(updatedData[0].name);
             }
+            setIsGroup(result.group);
             setImage(result.image);
             setLoading(false);
             return;
@@ -80,10 +78,8 @@ export default function Chat() {
           throw new Error("An unexpected error occurred!");
         } else {
           if (result.group) {
-            setIsGroup(result.group);
             setAdmin(result.admin);
           }
-          console.log(result.data);
           if (result.data.name) {
             setName(result.data.name);
           } else {
@@ -92,6 +88,7 @@ export default function Chat() {
             );
             setName(updatedData[0].name);
           }
+          setIsGroup(result.group);
           setImage(result.image);
           setMesseges(result.messages);
           setLoading(false);
@@ -205,10 +202,26 @@ export default function Chat() {
               />
             </div>
             <div className="barleftdiv">
-              <img src={image || pfp} alt="user image" />
+              <img
+                src={image || pfp}
+                alt="user image"
+                style={
+                  isGroup
+                    ? { border: "2px solid #12e269" }
+                    : { border: "2px solid #9c08ff" }
+                }
+                onClick={() => {
+                  props.detailspage();
+                }}
+              />
               <div>
-                <h3>{name}</h3>
-                <p>@username</p>
+                <h3
+                  onClick={() => {
+                    props.detailspage();
+                  }}
+                >
+                  {name}
+                </h3>
               </div>
             </div>
           </div>
@@ -304,7 +317,7 @@ export default function Chat() {
                 >
                   <p className="messege">
                     {e.senderID !== user.id ? (
-                      <span className="name">@username</span>
+                      <span className="name">{e.username}</span>
                     ) : (
                       <></>
                     )}{" "}

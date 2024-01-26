@@ -18,6 +18,7 @@ const messegeschema = new mongoose.Schema({
     type: Date,
     default: () => new Date(),
   },
+  username: { type: String },
 });
 
 module.exports = mongoose.model("messeges", messegeschema);

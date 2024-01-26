@@ -67,14 +67,26 @@ module.exports.getNewMessagesCount = async (req, res) => {
   try {
     const chatID = req.body.chatId;
     const userID = req.body.userId;
-    const messages = await messegesModel.find({ chatID: chatID });
+
+    // Fetch messages in descending order to get the latest first
+    const messages = await messegesModel
+      .find({ chatID: chatID })
+      .sort({ _id: -1 });
+
     let count = 0;
+    console.log("||||||||||||||||||||" + messages + "|||||||||||||||||||||||");
+    let latestMessage = messages[0].content;
+
     for (let i = 0; i < messages.length; i++) {
       if (!messages[i].seenBy.includes(userID)) {
         count++;
+        break;
       }
     }
-    return res.status(200).json({ newMessageCount: count });
+    return res.status(200).json({
+      newMessageCount: count,
+      latestMessage: latestMessage,
+    });
   } catch (e) {
     return res
       .status(500)
@@ -105,6 +117,7 @@ module.exports.createmessege = async (req, res, next) => {
       senderID: userID,
       content,
       seenBy: [userID],
+      username: user.username,
     });
     await messege.save();
 

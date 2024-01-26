@@ -7,6 +7,7 @@ const initialState = {
     id: "",
     about: "",
     imageurl: "",
+    user: "",
   },
 };
 

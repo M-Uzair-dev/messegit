@@ -236,17 +236,17 @@
 }
 .barleftdiv > img {
   border-radius: 50%;
-  border: 2px solid #9c08ff;
+  cursor: pointer;
+}
+.barleftdiv > div {
+  display: flex;
+  align-items: center;
 }
 .barleftdiv > div > h3 {
   height: min-content;
   margin: 0 0 0 10px;
   font-weight: 500;
-}
-.barleftdiv > div > p {
-  height: min-content;
-  margin: 0 0 0 10px;
-  color: rgb(73, 73, 73);
+  cursor: pointer;
 }
 .dots {
   display: flex;
@@ -354,7 +354,7 @@
   background-color: #c778f83f;
   border: 2px solid #8a4eb3;
   backdrop-filter: blur(1px);
-  z-index: 1000;
+  z-index: 15;
   display: flex;
   justify-content: space-between;
   align-items: center;
