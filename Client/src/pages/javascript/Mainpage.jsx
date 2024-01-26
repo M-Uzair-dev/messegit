@@ -7,11 +7,13 @@ import AddUser from "./Inner Pages/SearchUser";
 import CreateGroup from "./Inner Pages/CreateGroup";
 import Profilepage from "./Inner Pages/Profilepage";
 import CloseIcon from "@mui/icons-material/Close";
+import { useParams } from "react-router-dom";
 
 export default function Mainpage() {
   const [showAddDiv, setshowAddDiv] = useState(false);
   const [showAddChat, setShowAddChat] = useState(false);
   const [showCreateGroupPage, setShowCreateGroupPage] = useState(false);
+  const { id } = useParams();
 
   const [showProfilePage, setShowProfilePage] = useState(false);
 
@@ -97,6 +99,9 @@ export default function Mainpage() {
         ) : (
           <></>
         )}
+        <div className={id ? "chatdivmain show" : "chatdivmain"}>
+          <Chat back={true} />
+        </div>
       </div>
 
       <div className="MainRightCont">

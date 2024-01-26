@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import "../../pages/css/innerpages.css";
 import { useSelector } from "react-redux";
 
-export default function ChatCard({ pfp, name, message, id, nowrap, onclick }) {
+export default function ChatCard({
+  pfp,
+  name,
+  message,
+  id,
+  nowrap,
+  onclick,
+  isGroup,
+}) {
   const [count, setcount] = useState(0);
 
   const user = useSelector((state) => state.user);
@@ -48,9 +56,10 @@ export default function ChatCard({ pfp, name, message, id, nowrap, onclick }) {
     <div>
       <div
         onClick={() => {
+          setcount(0);
           onclick ? onclick() : null;
         }}
-        className="card"
+        className={isGroup ? "group card" : "card"}
         style={nowrap ? { width: "100%" } : {}}
       >
         <div className="cardleftdiv">

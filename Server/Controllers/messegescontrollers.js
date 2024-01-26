@@ -25,12 +25,35 @@ module.exports.getmesseges = async (req, res) => {
       });
 
       await Promise.all(updatedMessages.map((message) => message.save()));
-
-      return res.status(200).json({ success: true, messages: updatedMessages });
+      let data;
+      if (chat.data.length === 0) {
+        data = { name: chat.name };
+      } else {
+        data = chat.data;
+      }
+      return res.status(200).json({
+        success: true,
+        messages: updatedMessages,
+        group: chat.isGroup,
+        admin: chat.admin,
+        data,
+        image: chat.imageurl,
+      });
     } else {
-      return res
-        .status(200)
-        .json({ success: false, message: "No messages found" });
+      let data;
+      if (chat.data.length === 0) {
+        data = { name: chat.name };
+      } else {
+        data = chat.data;
+      }
+      return res.status(200).json({
+        success: false,
+        message: "No messages found",
+        group: chat.isGroup,
+        admin: chat.admin,
+        data,
+        image: chat.imageurl,
+      });
     }
   } catch (e) {
     console.log(e);
@@ -39,6 +62,7 @@ module.exports.getmesseges = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" });
   }
 };
+
 module.exports.getNewMessagesCount = async (req, res) => {
   try {
     const chatID = req.body.chatId;

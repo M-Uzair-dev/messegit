@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import pfp from "../../../images/userpfp.jpg";
 import SendIcon from "@mui/icons-material/Send";
@@ -11,22 +11,27 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 
 export default function Chat() {
-  //        States
+  //------------------------------- Variables and Hooks --------------------------------------------
 
   const refresh = localStorage.getItem("refresh");
   const { id } = useParams();
   const navigate = useNavigate();
   const chatContainerRef = useRef(null);
-  let username = "@uzair-manan-224";
   const user = useSelector((state) => state.user);
   const { enqueueSnackbar } = useSnackbar();
+
+  //----------------------------------- States ---------------------------------------------------
 
   const [messege, setMessege] = useState("");
   const [showdrop, setShowdrop] = useState(false);
   const [messeges, setMesseges] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isGroup, setIsGroup] = useState(false);
+  const [admin, setAdmin] = useState("");
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
 
-  // UseEffect
+  // --------------------------------  UseEffects -----------------------------------------------
 
   useEffect(() => {
     setLoading(true);
@@ -51,18 +56,45 @@ export default function Chat() {
         }
 
         const result = await res.json();
+        console.log(result.data);
 
         if (result.success === false) {
           if (result.message === "No messages found") {
+            if (result.group) {
+              setIsGroup(result.group);
+              setAdmin(result.admin);
+            }
+
+            if (result.data.name) {
+              setName(result.data.name);
+            } else {
+              let updatedData = result.data.filter(
+                (userObj) => userObj.id !== user.id
+              );
+              setName(updatedData[0].name);
+            }
+            setImage(result.image);
             setLoading(false);
             return;
           }
           throw new Error("An unexpected error occurred!");
         } else {
+          if (result.group) {
+            setIsGroup(result.group);
+            setAdmin(result.admin);
+          }
+          console.log(result.data);
+          if (result.data.name) {
+            setName(result.data.name);
+          } else {
+            let updatedData = result.data.filter(
+              (userObj) => userObj.id !== user.id
+            );
+            setName(updatedData[0].name);
+          }
+          setImage(result.image);
           setMesseges(result.messages);
           setLoading(false);
-          console.log(result.messages);
-          console.log(user.id);
         }
       } catch (e) {
         console.log(e);
@@ -84,7 +116,7 @@ export default function Chat() {
     }
   }, [messeges]);
 
-  //  Functions
+  //  ----------------------------- Functions -----------------------------------------
 
   const handleChange = (e) => {
     setMessege(e.target.value);
@@ -148,11 +180,14 @@ export default function Chat() {
         throw new Error("An unexpected error occurred!");
       }
       setMesseges([...messeges, { content: messege, senderID: user.id }]);
+      setMessege("");
     } catch (e) {
       navigate("/chats");
       enqueueSnackbar("An error occured.", { variant: "error" });
     }
   };
+
+  //--------------------------------  JSX  --------------------------------------------------
 
   return (
     <div className="rightpage">
@@ -160,11 +195,21 @@ export default function Chat() {
         <></>
       ) : (
         <div className="rightSideTopBar">
-          <div className="barleftdiv">
-            <img src={pfp} alt="user image" />
-            <div>
-              <h3>User's name</h3>
-              <p>@username</p>
+          <div className="left">
+            <div className="arrow">
+              <ArrowBackIcon
+                className="backarrow"
+                onClick={() => {
+                  navigate("/chats");
+                }}
+              />
+            </div>
+            <div className="barleftdiv">
+              <img src={image || pfp} alt="user image" />
+              <div>
+                <h3>{name}</h3>
+                <p>@username</p>
+              </div>
             </div>
           </div>
           <div className="dots">
@@ -176,17 +221,37 @@ export default function Chat() {
                     setShowdrop(false);
                   }}
                 />
-                <div className="dropmenu">
-                  <p
-                    onClick={() => {
-                      deletechat();
-                    }}
-                  >
-                    Delete Chat
-                  </p>
-                  <p>Block User</p>
-                  <p>Report User</p>
-                </div>
+                {isGroup ? (
+                  admin === user.id ? (
+                    <div className="dropmenu">
+                      <p>Add members</p>
+                      <p
+                        onClick={() => {
+                          deletechat();
+                        }}
+                      >
+                        Delete Group
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="dropmenu">
+                      <p>Exit Group</p>
+                      <p>Report group</p>
+                    </div>
+                  )
+                ) : (
+                  <div className="dropmenu">
+                    <p
+                      onClick={() => {
+                        deletechat();
+                      }}
+                    >
+                      Delete Chat
+                    </p>
+                    <p>Block User</p>
+                    <p>Report User</p>
+                  </div>
+                )}
               </>
             ) : (
               <MoreVertIcon
@@ -239,7 +304,7 @@ export default function Chat() {
                 >
                   <p className="messege">
                     {e.senderID !== user.id ? (
-                      <span className="name">{username}</span>
+                      <span className="name">@username</span>
                     ) : (
                       <></>
                     )}{" "}
@@ -260,6 +325,7 @@ export default function Chat() {
               onChange={(e) => {
                 handleChange(e);
               }}
+              value={messege}
               placeholder="Type here..."
               className="messegeInput"
             />

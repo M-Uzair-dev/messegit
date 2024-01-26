@@ -261,7 +261,7 @@
 .messeges {
   max-width: 100%;
   padding: 10px;
-  max-height: calc(95vh - 90px);
+  height: calc(95vh - 90px);
   overflow-x: hidden;
   overflow-y: scroll;
 }
@@ -361,7 +361,7 @@
   padding: 5px 10px;
   border-radius: 50px;
   /* width: 90%; */
-  height: 60px;
+  height: 50px;
   width: 10000px;
   max-width: 90%;
 }
@@ -447,4 +447,44 @@
   text-decoration: underline;
   color: rgb(0, 119, 255);
   cursor: pointer;
+}
+.buttonDiv {
+  position: absolute;
+  bottom: 10px;
+}
+.groupcards {
+  max-height: calc(95vh - 140px - 200px);
+}
+.group .cardleftdiv img {
+  height: 100%;
+  border-radius: 50%;
+  border: 2px solid #12e269;
+}
+.arrow {
+  width: 50px;
+  position: relative;
+  margin-right: 5px;
+}
+.arrow * {
+  height: 60%;
+  font-size: 2rem !important;
+}
+.left {
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 650px) {
+  .hide {
+    display: none;
+  }
+  .messeges {
+    max-width: 100%;
+    padding: 10px;
+    height: calc(95vh - 50px);
+  }
+}
+@media (max-width: 800px) {
+  .messege {
+    max-width: 70%;
+  }
 }

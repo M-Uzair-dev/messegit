@@ -60,7 +60,9 @@
 
   animation: spin 2s linear 0s infinite reverse;
 }
-
+.chatdivmain {
+  display: none;
+}
 @media (max-width: 650px) {
   .main {
     padding: 0px;
@@ -75,5 +77,8 @@
     height: 100%;
     margin: 0;
     border-radius: 0px;
+  }
+  .show {
+    display: block;
   }
 }

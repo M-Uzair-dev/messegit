@@ -105,30 +105,40 @@ module.exports.deletechat = (req, res) => {
 
 module.exports.creategroup = async (req, res) => {
   const members = req.body.members;
+  const userID = req.body.userID;
+  const name = req.body.name;
+  console.log(members + "||||" + userID + "||||||" + name);
   if (!members) {
     return res
       .status(400)
       .json({ success: false, error: "members are required." });
   }
-  if (!req.body.userID) {
+  if (!userID) {
+    return res
+      .status(400)
+      .json({ success: false, error: "UserID is required" });
+  }
+  if (!name) {
     return res
       .status(400)
       .json({ success: false, error: "UserID is required" });
   }
   try {
     const chat = new chatModel({
-      members: [...members, req.body.userID],
+      members: [...members, userID],
       isGroup: true,
-      admin: req.body.userID,
+      admin: userID,
+      name,
     });
     await chat.save();
 
     return res.status(201).json({
       success: true,
-      data: { chatId: chat._id },
+      chatId: chat._id,
     });
   } catch (err) {
-    return res.status(500).send("Server Error");
+    console.log(err);
+    return res.status(500).send({ success: false, error: "Server Error" });
   }
 };
 

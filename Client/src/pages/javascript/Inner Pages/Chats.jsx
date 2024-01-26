@@ -8,16 +8,24 @@ import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ChatCard from "../../../components/javascript/ChatCard";
 import { useSelector } from "react-redux";
 import { TailSpin } from "react-loader-spinner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function Chats(props) {
+  //------------------------------- Variables and Hooks --------------------------------------------
+
+  const navigate = useNavigate();
+  let refresh = localStorage.getItem("refresh");
+  const user = useSelector((state) => state.user);
+  const { id } = useParams();
+
+  //------------------------------- States --------------------------------------------
+
   const [data, setData] = useState([]);
   const [noChats, setNochats] = useState(false);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-  let refresh = localStorage.getItem("refresh");
 
-  const user = useSelector((state) => state.user);
+  //------------------------------- UseEffect --------------------------------------------
+
   useEffect(() => {
     const fetchData = async () => {
       setNochats(false);
@@ -47,7 +55,6 @@ export default function Chats(props) {
             throw new Error("An unexpected error occurred!");
           } else {
             let updated = await result.chats.map((chat) => {
-              // Assuming chat.data is an array
               let updatedData = chat.data.filter(
                 (userObj) => userObj.id !== user.id
               );
@@ -68,8 +75,11 @@ export default function Chats(props) {
     fetchData();
   }, [user.id, refresh]);
 
+  //------------------------------- JSX --------------------------------------------
+  console.log(id);
+
   return (
-    <div className="leftMainContainer">
+    <div className={id ? "leftMainContainer hide" : "leftMainContainer"}>
       <div className="LeftTopBar">
         <div className="InnerLeftTopBar">
           <img src={logo} alt="logo" />
@@ -131,7 +141,18 @@ export default function Chats(props) {
       ) : (
         <div className="cards">
           {data.map((e) => {
-            return (
+            return e.isGroup ? (
+              <ChatCard
+                key={e._id}
+                pfp={e.imageurl || pfp}
+                name={e.name || "User's name"}
+                id={e._id}
+                onclick={() => {
+                  navigate(`/chats/${e._id}`);
+                }}
+                isGroup={true}
+              />
+            ) : (
               <ChatCard
                 key={e._id}
                 pfp={e.data[0].imageurl || pfp}
