@@ -8,7 +8,7 @@ import CreateGroup from "./Inner Pages/CreateGroup";
 import Profilepage from "./Inner Pages/Profilepage";
 import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router-dom";
-import Details from "./Inner Pages/details";
+import Details from "./Inner Pages/Details";
 
 export default function Mainpage() {
   const [showAddDiv, setshowAddDiv] = useState(false);

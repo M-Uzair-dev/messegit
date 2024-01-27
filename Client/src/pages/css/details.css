@@ -4,6 +4,78 @@
   left: 0;
   height: 100%;
   width: 100%;
-  background-color: white;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #f0f0f0;
   z-index: 20;
+  font-family: "Poppins", sans-serif;
+  overflow-y: scroll;
+}
+.detailsPageWrapper {
+  position: relative;
+  max-height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+}
+.arrowInDetailsPage {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  cursor: pointer;
+}
+.arrowInDetailsPage > * {
+  font-size: 2rem !important;
+}
+.image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 540px;
+  padding: 0 20px;
+}
+.image > img {
+  height: 200px;
+  width: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid rgb(30, 123, 230);
+  max-width: 100%;
+}
+.detailsContainer > * {
+  text-align: center;
+  margin: 0;
+}
+.detailsContainer h1 {
+  font-weight: 600;
+}
+.detailsContainer p {
+  color: rgb(83, 83, 83);
+}
+.detailsContainer p:last-of-type {
+  margin-top: 5px;
+}
+.users {
+  width: 50%;
+  text-align: start;
+}
+.users > h1 {
+  font-size: 25px;
+  font-weight: 400;
+}
+.buttons {
+  margin: 20px 0;
+}
+@media (max-width: 842px) {
+  .users {
+    width: 80%;
+  }
+}
+@media (max-width: 310px) {
+  .users {
+    width: 95%;
+  }
 }

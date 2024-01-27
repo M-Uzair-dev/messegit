@@ -488,3 +488,6 @@
     max-width: 70%;
   }
 }
+.center {
+  height: max-content;
+}
