@@ -7,6 +7,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
+import { TailSpin } from "react-loader-spinner";
 
 export default function Details(props) {
   const { id } = useParams();
@@ -14,6 +15,7 @@ export default function Details(props) {
   const chatContainerRef = useRef(null);
   const user = useSelector((state) => state.user);
   const { enqueueSnackbar } = useSnackbar();
+  const refresh = localStorage.getItem("refresh");
 
   const [loading, setLoading] = useState(false);
   const [group, setGroup] = useState(false);
@@ -22,7 +24,7 @@ export default function Details(props) {
   const [about, setAbout] = useState("");
   const [username, setUsername] = useState("");
   const [imageurl, setImageurl] = useState("");
-  const [admin, setAdmin] = useState(false);
+  const [admin, setAdmin] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -46,7 +48,6 @@ export default function Details(props) {
         }
 
         const result = await res.json();
-        console.log(result);
 
         if (result.success === false) {
           navigate("/chats");
@@ -54,10 +55,16 @@ export default function Details(props) {
         } else {
           if (result.group) {
             setGroup(true);
-            setUsers(result.details.members);
-            setImageurl(result.details.imageurl);
-            setName(result.details.name);
-            setAdmin(result.details.admin === user.id);
+            let details = result.details;
+            const index = details.members.findIndex(
+              (obj) => obj.id === details.admin
+            );
+            const targetObject = details.members.splice(index, 1)[0];
+            const sortedArray = [targetObject, ...details.members];
+            setUsers(sortedArray);
+
+            setName(details.name);
+            setAdmin(details.admin);
           } else {
             let user = result.user;
             if (!user) throw new error("User is not present");
@@ -79,13 +86,83 @@ export default function Details(props) {
     fetchData();
   }, [props.visible]);
 
+  let deletechat = async (message) => {
+    try {
+      const res = await fetch("http://localhost:5000/chats/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chatID: id,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const result = await res.json();
+      if (result.success === true) {
+        navigate("/chats");
+        if (refresh === "true") localStorage.setItem("refresh", false);
+        else localStorage.setItem("refresh", true);
+
+        enqueueSnackbar(message, { variant: "success" });
+        props.hide();
+      }
+    } catch (e) {
+      console.log(e);
+      enqueueSnackbar("An error occured.", { variant: "error" });
+    }
+  };
+
+  let exitgroup = async (message) => {
+    try {
+      const res = await fetch("http://localhost:5000/chats/exit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chatID: id,
+          userID: user.id,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const result = await res.json();
+      if (result.success === true) {
+        navigate("/chats");
+        if (refresh === "true") localStorage.setItem("refresh", false);
+        else localStorage.setItem("refresh", true);
+
+        enqueueSnackbar(message, { variant: "success" });
+        props.hide();
+      }
+    } catch (e) {
+      console.log(e);
+      enqueueSnackbar("An error occured.", { variant: "error" });
+    }
+  };
+
   return (
     <div
       className="DetailsPage"
       style={props.visible ? { display: "block" } : { display: "none" }}
     >
       {loading ? (
-        <>loading</>
+        <div className="spinner">
+          <TailSpin
+            visible={true}
+            height="70"
+            width="70"
+            color="black"
+            ariaLabel="tail-spin-loading"
+            radius="1"
+            wrapperStyle={{}}
+            wrapperClass=""
+          />
+        </div>
       ) : group ? (
         <div className="detailsPageWrapper">
           <div
@@ -105,28 +182,49 @@ export default function Details(props) {
             {users.map((e) => {
               return (
                 <ChatCard
-                  key={e._id}
+                  key={e.id}
                   pfp={e.imageur || pfp}
                   name={e.name}
                   id={""}
-                  onclick={() => {}}
+                  onclick={() => {
+                    console.log(e._id + "||||||" + admin);
+                  }}
                   username={e.username}
+                  admin={e.id === admin}
                 />
               );
             })}
-            {admin ? (
+            {admin === user.id ? (
               <div className="buttons">
                 <Button
                   theme="gradient"
                   submit={() => {}}
                   text="Manage Users"
                 />
-                <Button theme="dark" submit={() => {}} text="Delete Group" />
+                <Button
+                  theme="dark"
+                  submit={() => {
+                    deletechat("Group Deleted successfully");
+                  }}
+                  text="Delete Group"
+                />
               </div>
             ) : (
               <div className="buttons">
-                <Button theme="gradient" submit={() => {}} text="Exit Group" />
-                <Button theme="dark" submit={() => {}} text="Report Group" />
+                <Button
+                  theme="gradient"
+                  submit={() => {
+                    exitgroup("Group Exited.");
+                  }}
+                  text="Exit Group"
+                />
+                <Button
+                  theme="dark"
+                  submit={() => {
+                    exitgroup("Group Reported Successfuly");
+                  }}
+                  text="Report Group"
+                />
               </div>
             )}
           </div>
@@ -149,8 +247,20 @@ export default function Details(props) {
           </div>
           <div className="users">
             <div className="buttons">
-              <Button theme="gradient" submit={() => {}} text="Delete chat" />
-              <Button theme="dark" submit={() => {}} text="Report user" />
+              <Button
+                theme="gradient"
+                submit={() => {
+                  deletechat("Chat deleted Successfully");
+                }}
+                text="Delete chat"
+              />
+              <Button
+                theme="dark"
+                submit={() => {
+                  deletechat("User has been Reported");
+                }}
+                text="Report user"
+              />
             </div>
           </div>
         </div>

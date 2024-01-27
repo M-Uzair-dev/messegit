@@ -491,3 +491,16 @@
 .center {
   height: max-content;
 }
+.admin {
+  width: max-content;
+  padding: 0 5px;
+  background-color: #7c63ecb0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+.admin > p {
+  margin: 0;
+  padding: 0;
+}

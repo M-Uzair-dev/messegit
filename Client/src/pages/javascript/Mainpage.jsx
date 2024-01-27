@@ -36,6 +36,9 @@ export default function Mainpage() {
           showprofilepage={() => {
             setShowProfilePage(!showProfilePage);
           }}
+          hidedetailspage={() => {
+            setShowdetails(false);
+          }}
         />
 
         {showAddDiv ? (

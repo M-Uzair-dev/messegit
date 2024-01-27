@@ -9,7 +9,9 @@ module.exports.getchats = async (req, res) => {
       throw new Error("User ID is required");
     }
 
-    const chats = await chatModel.find({ members: { $in: [userID] } });
+    const chats = await chatModel
+      .find({ members: { $in: [userID] } })
+      .sort({ updatedAt: -1 }); // Sort by updatedAt in descending order
 
     if (chats && chats.length > 0) {
       return res.status(200).json({ success: true, chats });
@@ -78,7 +80,6 @@ module.exports.createchat = async (req, res, next) => {
       data: { chatId: chat._id },
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).send("Server Error");
   }
 };
@@ -107,7 +108,6 @@ module.exports.creategroup = async (req, res) => {
   const members = req.body.members;
   const userID = req.body.userID;
   const name = req.body.name;
-  console.log(members + "||||" + userID + "||||||" + name);
   if (!members) {
     return res
       .status(400)
@@ -137,7 +137,6 @@ module.exports.creategroup = async (req, res) => {
       chatId: chat._id,
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).send({ success: false, error: "Server Error" });
   }
 };
@@ -178,9 +177,9 @@ module.exports.getDetails = async (req, res) => {
     }
 
     if (chat.isGroup) {
-      let otherUsers = chat.members.filter((memberid) => memberid !== userID);
+      let users = chat.members;
       const userDetails = await Promise.all(
-        otherUsers.map(async (memberID) => {
+        users.map(async (memberID) => {
           const user = await usermodel.findById(memberID);
           return {
             id: user._id,
@@ -205,7 +204,23 @@ module.exports.getDetails = async (req, res) => {
       res.status(200).json({ success: true, group: false, user });
     }
   } catch (e) {
-    console.log(e);
     res.status(404).json({ success: false, error: "Internal Server error" });
+  }
+};
+
+module.exports.exitGroup = async (req, res) => {
+  try {
+    const { chatID, userID } = req.body;
+
+    const chat = await chatModel.findById(chatID);
+
+    chat.members = chat.members.filter((memberId) => memberId !== userID);
+
+    await chat.save();
+
+    res.status(200).json({ success: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };

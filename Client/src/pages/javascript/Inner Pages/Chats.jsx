@@ -146,6 +146,7 @@ export default function Chats(props) {
                 name={e.name || "User's name"}
                 id={e._id}
                 onclick={() => {
+                  props.hidedetailspage();
                   navigate(`/chats/${e._id}`);
                 }}
                 isGroup={true}
@@ -157,6 +158,7 @@ export default function Chats(props) {
                 name={e.data[0].name || "User's name"}
                 id={e._id}
                 onclick={() => {
+                  props.hidedetailspage();
                   navigate(`/chats/${e._id}`);
                 }}
               />

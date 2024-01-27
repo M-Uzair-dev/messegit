@@ -314,7 +314,7 @@ export default function Chat(props) {
                   }
                 >
                   <p className="messege">
-                    {e.senderID !== user.id ? (
+                    {e.senderID !== user.id && isGroup ? (
                       <span className="name">{e.username}</span>
                     ) : (
                       <></>

@@ -10,10 +10,10 @@ export default function ChatCard({
   onclick,
   isGroup,
   username,
+  admin,
 }) {
   const [count, setcount] = useState(0);
   const [latestMessage, setlatestMessage] = useState("");
-
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function ChatCard({
           setlatestMessage(result.latestMessage);
         }
       } catch (e) {
-        enqueueSnackbar("An error occured.", { variant: "error" });
+        console.log(e);
       }
     };
     getCount();
@@ -68,7 +68,12 @@ export default function ChatCard({
             {username ? <p>{username}</p> : <p>{latestMessage}</p>}
           </div>
         </div>
-        {count === 0 ? (
+
+        {admin ? (
+          <div className="admin badge">
+            <p>ADMIN</p>
+          </div>
+        ) : count === 0 ? (
           <></>
         ) : count ? (
           <div className="badge">

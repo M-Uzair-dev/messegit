@@ -130,11 +130,10 @@ module.exports.findUsers = async (req, res) => {
       return;
     }
 
-    const users = tempusers.filter((e) => !e.username.includes(usersname));
+    const users = tempusers.filter((e) => e.username !== usersname);
 
     res.status(200).json({ users });
   } catch (err) {
-    console.error(err);
     res.status(400).json({ success: false, errorMessage: err.message });
   }
 };

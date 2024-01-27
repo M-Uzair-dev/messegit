@@ -56,7 +56,6 @@ module.exports.getmesseges = async (req, res) => {
       });
     }
   } catch (e) {
-    console.log(e);
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });
@@ -68,14 +67,17 @@ module.exports.getNewMessagesCount = async (req, res) => {
     const chatID = req.body.chatId;
     const userID = req.body.userId;
 
-    // Fetch messages in descending order to get the latest first
     const messages = await messegesModel
       .find({ chatID: chatID })
       .sort({ _id: -1 });
 
     let count = 0;
-    console.log("||||||||||||||||||||" + messages + "|||||||||||||||||||||||");
-    let latestMessage = messages[0].content;
+    let latestMessage;
+    if (messages.length > 0) {
+      latestMessage = messages[0].content;
+    } else {
+      latestMessage = "";
+    }
 
     for (let i = 0; i < messages.length; i++) {
       if (!messages[i].seenBy.includes(userID)) {
@@ -88,6 +90,7 @@ module.exports.getNewMessagesCount = async (req, res) => {
       latestMessage: latestMessage,
     });
   } catch (e) {
+    console.log(e);
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });
@@ -109,23 +112,30 @@ module.exports.createmessege = async (req, res, next) => {
   try {
     const user = await usermodel.findById(userID);
     const chat = await chatsmodel.findById(chatID);
+
     if (!user || !chat) {
-      return res.status(500).json({ success: false, message: "User invalid" });
+      return res
+        .status(500)
+        .json({ success: false, message: "User or chat invalid" });
     }
-    const messege = new messegesModel({
+
+    const message = new messegesModel({
       chatID,
       senderID: userID,
       content,
       seenBy: [userID],
       username: user.username,
     });
-    await messege.save();
+
+    await message.save();
+
+    chat.updatedAt = new Date();
+    await chat.save();
 
     return res.status(201).json({
       success: true,
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ success: false, message: "server error" });
   }
 };
