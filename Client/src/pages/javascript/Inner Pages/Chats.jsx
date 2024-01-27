@@ -60,7 +60,6 @@ export default function Chats(props) {
               );
               return { ...chat, data: updatedData };
             });
-            console.log(updated);
 
             setData(updated);
             setLoading(false);
@@ -76,7 +75,6 @@ export default function Chats(props) {
   }, [user.id, refresh]);
 
   //------------------------------- JSX --------------------------------------------
-  console.log(id);
 
   return (
     <div className={id ? "leftMainContainer hide" : "leftMainContainer"}>

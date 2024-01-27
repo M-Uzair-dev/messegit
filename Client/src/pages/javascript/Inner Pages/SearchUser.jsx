@@ -21,7 +21,6 @@ export default function SearchUser(props) {
 
   const createChat = async (id) => {
     try {
-      console.log("Function called");
       const res = await fetch("http://localhost:5000/chats/new", {
         method: "POST",
         headers: {
@@ -84,7 +83,6 @@ export default function SearchUser(props) {
           setLoading(false);
           return;
         }
-        console.log(result);
         setData(result.users);
         setLoading(false);
       } catch (e) {
@@ -107,14 +105,7 @@ export default function SearchUser(props) {
           props.off();
         }}
       />
-      <h1
-        className="heading"
-        onClick={() => {
-          console.log(data);
-        }}
-      >
-        Search User
-      </h1>
+      <h1 className="heading">Search User</h1>
       <div className="inputDiv">
         <Input
           label="Search"

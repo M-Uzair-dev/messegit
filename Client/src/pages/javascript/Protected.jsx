@@ -16,7 +16,6 @@ export default function Protected() {
 
   useEffect(() => {
     const validate = async () => {
-      console.log("Cookies Checked");
       try {
         if (!cookies.jwt) {
           navigate("/login");

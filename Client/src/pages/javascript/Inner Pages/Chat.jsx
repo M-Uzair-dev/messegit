@@ -94,7 +94,6 @@ export default function Chat(props) {
           setLoading(false);
         }
       } catch (e) {
-        console.log(e);
         setLoading(false);
         navigate("/chats");
         enqueueSnackbar("An error occured.", { variant: "error" });
@@ -143,7 +142,6 @@ export default function Chat(props) {
         setShowdrop(false);
       }
     } catch (e) {
-      console.log(e);
       enqueueSnackbar("An error occured.", { variant: "error" });
     }
   };

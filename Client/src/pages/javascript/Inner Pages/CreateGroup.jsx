@@ -42,7 +42,6 @@ export default function CreateGroup(props) {
 
   const createGroup = async (id) => {
     try {
-      console.log(name);
       const res = await fetch("http://localhost:5000/chats/newgroup", {
         method: "POST",
         headers: {
@@ -135,14 +134,7 @@ export default function CreateGroup(props) {
           props.off();
         }}
       />
-      <h1
-        className="heading"
-        onClick={() => {
-          console.log(data);
-        }}
-      >
-        Create a Group
-      </h1>
+      <h1 className="heading">Create a Group</h1>
       <div className="inputDiv">
         <Input
           label="Name"

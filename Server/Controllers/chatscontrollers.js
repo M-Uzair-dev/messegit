@@ -167,3 +167,45 @@ module.exports.addMembers = (req, res) => {
         .json({ success: false, error: "Chat could not be found!" });
     });
 };
+module.exports.getDetails = async (req, res) => {
+  let chatID = req.body.chatID;
+  let userID = req.body.userID;
+  try {
+    let chat = await chatModel.findById(chatID);
+    if (!chat) {
+      res.status(400).json({ success: false, message: "Invalid Chat ID" });
+      return;
+    }
+
+    if (chat.isGroup) {
+      let otherUsers = chat.members.filter((memberid) => memberid !== userID);
+      const userDetails = await Promise.all(
+        otherUsers.map(async (memberID) => {
+          const user = await usermodel.findById(memberID);
+          return {
+            id: user._id,
+            name: user.name,
+            image: user.imageurl,
+            username: user.username,
+          };
+        })
+      );
+
+      const details = {
+        name: chat.name,
+        image: chat.imageurl,
+        admin: chat.admin,
+        members: userDetails,
+      };
+
+      res.status(200).json({ success: true, group: true, details });
+    } else {
+      let otherUser = chat.members.filter((memberid) => memberid !== userID)[0];
+      let user = await usermodel.findById(otherUser);
+      res.status(200).json({ success: true, group: false, user });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(404).json({ success: false, error: "Internal Server error" });
+  }
+};

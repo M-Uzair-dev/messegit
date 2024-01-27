@@ -2,7 +2,15 @@ import React, { useEffect, useState } from "react";
 import "../../pages/css/innerpages.css";
 import { useSelector } from "react-redux";
 
-export default function ChatCard({ pfp, name, id, nowrap, onclick, isGroup }) {
+export default function ChatCard({
+  pfp,
+  name,
+  id,
+  nowrap,
+  onclick,
+  isGroup,
+  username,
+}) {
   const [count, setcount] = useState(0);
   const [latestMessage, setlatestMessage] = useState("");
 
@@ -37,10 +45,8 @@ export default function ChatCard({ pfp, name, id, nowrap, onclick, isGroup }) {
         } else {
           setcount(result.newMessageCount);
           setlatestMessage(result.latestMessage);
-          console.log(result);
         }
       } catch (e) {
-        console.log(e);
         enqueueSnackbar("An error occured.", { variant: "error" });
       }
     };
@@ -59,7 +65,7 @@ export default function ChatCard({ pfp, name, id, nowrap, onclick, isGroup }) {
           <img src={pfp} alt="user image" />
           <div>
             <h3>{name}</h3>
-            <p>{latestMessage}</p>
+            {username ? <p>{username}</p> : <p>{latestMessage}</p>}
           </div>
         </div>
         {count === 0 ? (
