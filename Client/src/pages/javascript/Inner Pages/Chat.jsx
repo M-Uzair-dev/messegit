@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
+import Confirm from "./confirm";
 
 export default function Chat(props) {
   //------------------------------- Variables and Hooks --------------------------------------------
@@ -27,9 +28,14 @@ export default function Chat(props) {
   const [messeges, setMesseges] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isGroup, setIsGroup] = useState(false);
+
   const [admin, setAdmin] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [fnc, setfnc] = useState("");
+
   // --------------------------------  UseEffects -----------------------------------------------
 
   useEffect(() => {
@@ -118,7 +124,7 @@ export default function Chat(props) {
     setMessege(e.target.value);
   };
 
-  let deletechat = async () => {
+  let deletechat = async (m) => {
     try {
       const res = await fetch("http://localhost:5000/chats/delete", {
         method: "POST",
@@ -138,10 +144,39 @@ export default function Chat(props) {
         if (refresh === "true") localStorage.setItem("refresh", false);
         else localStorage.setItem("refresh", true);
 
-        enqueueSnackbar("Chat deleted..", { variant: "success" });
+        enqueueSnackbar(m, { variant: "success" });
         setShowdrop(false);
       }
     } catch (e) {
+      enqueueSnackbar("An error occured.", { variant: "error" });
+    }
+  };
+
+  let exitgroup = async (message) => {
+    try {
+      const res = await fetch("http://localhost:5000/chats/exit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chatID: id,
+          userID: user.id,
+        }),
+      });
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      const result = await res.json();
+      if (result.success === true) {
+        navigate("/chats");
+        if (refresh === "true") localStorage.setItem("refresh", false);
+        else localStorage.setItem("refresh", true);
+
+        enqueueSnackbar(message, { variant: "success" });
+      }
+    } catch (e) {
+      console.log(e);
       enqueueSnackbar("An error occured.", { variant: "error" });
     }
   };
@@ -179,6 +214,36 @@ export default function Chat(props) {
     } catch (e) {
       navigate("/chats");
       enqueueSnackbar("An error occured.", { variant: "error" });
+    }
+  };
+  let cont = () => {
+    if (fnc === "DeleteChat") {
+      deletechat("Chat deleted.");
+      setfnc("");
+    } else if (fnc === "BlockChat") {
+      deletechat("User blocked successfully.");
+      setfnc("");
+    } else if (fnc === "Report") {
+      enqueueSnackbar(
+        "the User has been reported. we will see their activity and take actions",
+        { variant: "warning" }
+      );
+      setfnc("");
+    } else if (fnc === "ReportGroup") {
+      enqueueSnackbar(
+        "This Group has been reported. we will see the activity and take actions",
+        { variant: "warning" }
+      );
+      setfnc("");
+    } else if (fnc === "DeleteGroup") {
+      deletechat("Group Deleted successfully.");
+      setfnc("");
+    } else if (fnc === "ExitGroup") {
+      exitgroup("Group Exited Successfully");
+      setfnc("");
+    } else {
+      enqueueSnackbar("Something went wrong.", { variant: "error" });
+      setfnc("");
     }
   };
 
@@ -238,7 +303,12 @@ export default function Chat(props) {
                       <p>Add members</p>
                       <p
                         onClick={() => {
-                          deletechat();
+                          setConfirmMessage(
+                            "Are you sure you want to delete this group ?"
+                          );
+                          setShowConfirm(true);
+                          setfnc("DeleteGroup");
+                          setShowdrop(false);
                         }}
                       >
                         Delete Group
@@ -246,21 +316,70 @@ export default function Chat(props) {
                     </div>
                   ) : (
                     <div className="dropmenu">
-                      <p>Exit Group</p>
-                      <p>Report group</p>
+                      <p
+                        onClick={() => {
+                          setConfirmMessage(
+                            "Are you sure you want to exit this group ?"
+                          );
+                          setShowConfirm(true);
+                          setfnc("ExitGroup");
+                          setShowdrop(false);
+                        }}
+                      >
+                        Exit Group
+                      </p>
+                      <p
+                        onClick={() => {
+                          setConfirmMessage(
+                            "Are you sure you want to Report this group ?"
+                          );
+                          setShowConfirm(true);
+                          setfnc("ReportGroup");
+                          setShowdrop(false);
+                        }}
+                      >
+                        Report group
+                      </p>
                     </div>
                   )
                 ) : (
                   <div className="dropmenu">
                     <p
                       onClick={() => {
-                        deletechat();
+                        setConfirmMessage(
+                          "Are you sure you want to Delete this chat ?"
+                        );
+                        setShowConfirm(true);
+                        setfnc("DeleteChat");
+                        setShowdrop(false);
                       }}
                     >
                       Delete Chat
                     </p>
-                    <p>Block User</p>
-                    <p>Report User</p>
+                    <p
+                      onClick={() => {
+                        setConfirmMessage(
+                          "Are you sure you want to Block this user ?"
+                        );
+                        setShowConfirm(true);
+                        setfnc("BlockChat");
+                        setShowdrop(false);
+                      }}
+                    >
+                      Block User
+                    </p>
+                    <p
+                      onClick={() => {
+                        setConfirmMessage(
+                          "Are you sure you want to Report this user ?"
+                        );
+                        setShowConfirm(true);
+                        setfnc("Report");
+                        setShowdrop(false);
+                      }}
+                    >
+                      Report User
+                    </p>
                   </div>
                 )}
               </>
@@ -348,6 +467,19 @@ export default function Chat(props) {
           </div>
         </div>
       )}
+      {
+        <Confirm
+          visible={showConfirm}
+          hide={() => {
+            setShowConfirm(false);
+          }}
+          message={confirmMessage}
+          yes={() => {
+            cont(fnc);
+            setShowConfirm(false);
+          }}
+        />
+      }
     </div>
   );
 }

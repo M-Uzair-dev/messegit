@@ -42,12 +42,13 @@ export default function Mainpage() {
         />
 
         {showAddDiv ? (
-          <div
-            className="blurDiv"
-            onClick={() => {
-              setshowAddDiv(false);
-            }}
-          >
+          <div className="addDiv">
+            <div
+              className="blurry"
+              onClick={() => {
+                setshowAddDiv(false);
+              }}
+            ></div>
             <div className="add">
               <CloseIcon
                 className="closeicon"
@@ -61,6 +62,7 @@ export default function Mainpage() {
                 theme="dark"
                 submit={() => {
                   setShowAddChat(true);
+                  setshowAddDiv(false);
                 }}
               />
               <Button
@@ -69,6 +71,7 @@ export default function Mainpage() {
                 theme="light"
                 submit={() => {
                   setShowCreateGroupPage(true);
+                  setshowAddDiv(false);
                 }}
               />
             </div>

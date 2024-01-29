@@ -80,20 +80,20 @@ module.exports.checkEmail = async (req, res, next) => {
 
 module.exports.editUser = async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    const updatedFields = req.body;
+    const userId = req.body.id;
+    const updatedFields = req.body.updatedFields;
     const user = await userModel.findById(userId);
 
     if (!user) {
       throw new Error("User not found");
     }
-
     Object.assign(user, updatedFields);
-
     await user.save();
 
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, user });
+    console.log(user);
   } catch (err) {
+    console.log(err);
     res.status(400).json({ success: false, errorMessage: err.message });
   }
 };

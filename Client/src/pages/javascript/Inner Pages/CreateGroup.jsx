@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Button from "../../../components/javascript/Button";
 import tick from "../../../images/tick.png";
+import Confirm from "./confirm";
 
 export default function CreateGroup(props) {
   const [data, setData] = useState([]);
@@ -24,6 +25,8 @@ export default function CreateGroup(props) {
   const { enqueueSnackbar } = useSnackbar();
   const [members, setMembers] = useState([]);
   const [users, setUsers] = useState([]);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
 
   const addUser = (user) => {
     if (members.includes(user._id)) {
@@ -203,12 +206,26 @@ export default function CreateGroup(props) {
           <Button
             theme="gradient"
             submit={() => {
-              createGroup();
+              setShowConfirm(true);
+              setConfirmMessage("Are you sure you want to make this group ?");
             }}
             text="Create group"
           />
         )}
       </div>
+      {
+        <Confirm
+          visible={showConfirm}
+          hide={() => {
+            setShowConfirm(false);
+          }}
+          message={confirmMessage}
+          yes={() => {
+            setShowConfirm(false);
+            createGroup();
+          }}
+        />
+      }
     </div>
   );
 }

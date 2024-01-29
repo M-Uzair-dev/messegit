@@ -10,6 +10,9 @@
   width: 100%;
   letter-spacing: 1px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .dark {
   background-color: black;
@@ -19,10 +22,10 @@
   opacity: 0.8;
 }
 .light {
-  background-color: rgb(228, 228, 228);
+  background-color: rgb(207, 207, 207);
 }
 .light:hover {
-  background-color: rgb(211, 211, 211);
+  background-color: rgb(189, 189, 189);
 }
 .gradient {
   background: linear-gradient(to bottom, #7663c9d5, #49bbe4c0);

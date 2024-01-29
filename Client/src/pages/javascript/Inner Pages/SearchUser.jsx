@@ -8,6 +8,7 @@ import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import Confirm from "./confirm";
 
 export default function SearchUser(props) {
   const [data, setData] = useState([]);
@@ -18,6 +19,9 @@ export default function SearchUser(props) {
   const navigate = useNavigate();
   const refresh = localStorage.getItem("refresh");
   const { enqueueSnackbar } = useSnackbar();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [fnc, setfnc] = useState("");
 
   const createChat = async (id) => {
     try {
@@ -37,13 +41,19 @@ export default function SearchUser(props) {
       }
 
       const data = await res.json();
+      console.log(data);
 
       if (data.data && data.success === true) {
         const redirectUrl = String(data.data.chatId);
         if (refresh === "true") localStorage.setItem("refresh", false);
         else localStorage.setItem("refresh", true);
         navigate(`/chats/${redirectUrl}`);
-        enqueueSnackbar("Chat added.", { variant: "success" });
+        if (data.existed) {
+          enqueueSnackbar("Chat exists.", { variant: "success" });
+        } else {
+          enqueueSnackbar("Chat added.", { variant: "success" });
+        }
+
         props.off();
       }
     } catch (e) {
@@ -145,12 +155,29 @@ export default function SearchUser(props) {
               message={""}
               nowrap={true}
               onclick={() => {
-                createChat(e._id);
+                setConfirmMessage(
+                  `Are you sure you want to start a chat with ${e.username}`
+                );
+                setfnc(String(e._id));
+                setShowConfirm(true);
               }}
             />
           ))
         )}
       </div>
+      {
+        <Confirm
+          visible={showConfirm}
+          hide={() => {
+            setShowConfirm(false);
+          }}
+          message={confirmMessage}
+          yes={() => {
+            setShowConfirm(false);
+            createChat(fnc);
+          }}
+        />
+      }
     </div>
   );
 }

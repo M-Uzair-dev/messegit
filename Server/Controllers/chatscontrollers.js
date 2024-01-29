@@ -1,5 +1,6 @@
 const chatModel = require("../Models/chatsmodel");
 const usermodel = require("../Models/usermodel");
+const messegesModel = require("../Models/messegesmodel");
 
 module.exports.getchats = async (req, res) => {
   try {
@@ -55,7 +56,8 @@ module.exports.createchat = async (req, res, next) => {
     if (existingChat) {
       return res.status(200).json({
         success: true,
-        data: existingChat._id,
+        data: { chatId: existingChat._id },
+        existed: true,
       });
     }
     let data = [
@@ -91,16 +93,24 @@ module.exports.deletechat = (req, res) => {
       res.json({ success: false, message: "Chat id is required" });
       return;
     }
-    chatModel
-      .findByIdAndDelete(chatID)
+
+    messegesModel
+      .deleteMany({ chatID })
       .then(() => {
-        res.json({ success: true });
+        chatModel
+          .findByIdAndDelete(chatID)
+          .then(() => {
+            res.json({ success: true });
+          })
+          .catch((err) => {
+            res.status(400).json({ success: false });
+          });
       })
       .catch((err) => {
-        res.status(400).json({ sucess: false });
+        res.status(400).json({ success: false });
       });
   } catch (e) {
-    res.status(400).json({ sucess: false, message: e.message });
+    res.status(400).json({ success: false, message: e.message });
   }
 };
 

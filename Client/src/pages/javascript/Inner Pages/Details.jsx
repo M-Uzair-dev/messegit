@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { TailSpin } from "react-loader-spinner";
+import Confirm from "./confirm";
 
 export default function Details(props) {
   const { id } = useParams();
@@ -25,6 +26,9 @@ export default function Details(props) {
   const [username, setUsername] = useState("");
   const [imageurl, setImageurl] = useState("");
   const [admin, setAdmin] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmMessage, setConfirmMessage] = useState("");
+  const [fnc, setfnc] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -145,6 +149,34 @@ export default function Details(props) {
     }
   };
 
+  let cont = () => {
+    if (fnc === "Report") {
+      enqueueSnackbar(
+        "This Group has been reported. we will see the activity and take actions",
+        { variant: "warning" }
+      );
+      setfnc("");
+    } else if (fnc === "exitGroup") {
+      exitgroup("Group exited Successfully");
+      setfnc("");
+    } else if (fnc === "deleteGroup") {
+      deletechat("Group Deleted Successfully");
+      setfnc("");
+    } else if (fnc === "deleteChat") {
+      deletechat("Chat Deleted Successfully");
+      setfnc("");
+    } else if (fnc === "ReportUser") {
+      enqueueSnackbar(
+        "This User has been reported. we will see their activity and take actions",
+        { variant: "warning" }
+      );
+      setfnc("");
+    } else {
+      enqueueSnackbar("Something went wrong.", { variant: "error" });
+      setfnc("");
+    }
+  };
+
   return (
     <div
       className="DetailsPage"
@@ -204,7 +236,12 @@ export default function Details(props) {
                 <Button
                   theme="dark"
                   submit={() => {
-                    deletechat("Group Deleted successfully");
+                    setConfirmMessage(
+                      "Are you sure you want to Delete this group ?"
+                    );
+                    setShowConfirm(true);
+                    setfnc("deleteGroup");
+                    setShowdrop(false);
                   }}
                   text="Delete Group"
                 />
@@ -214,14 +251,24 @@ export default function Details(props) {
                 <Button
                   theme="gradient"
                   submit={() => {
-                    exitgroup("Group Exited.");
+                    setConfirmMessage(
+                      "Are you sure you want to exit this group ?"
+                    );
+                    setShowConfirm(true);
+                    setfnc("exitGroup");
+                    setShowdrop(false);
                   }}
                   text="Exit Group"
                 />
                 <Button
                   theme="dark"
                   submit={() => {
-                    exitgroup("Group Reported Successfuly");
+                    setConfirmMessage(
+                      "Are you sure you want to Report this group ?"
+                    );
+                    setShowConfirm(true);
+                    setfnc("Report");
+                    setShowdrop(false);
                   }}
                   text="Report Group"
                 />
@@ -250,14 +297,24 @@ export default function Details(props) {
               <Button
                 theme="gradient"
                 submit={() => {
-                  deletechat("Chat deleted Successfully");
+                  setConfirmMessage(
+                    "Are you sure you want to Delete this chat ?"
+                  );
+                  setShowConfirm(true);
+                  setfnc("deleteChat");
+                  setShowdrop(false);
                 }}
                 text="Delete chat"
               />
               <Button
                 theme="dark"
                 submit={() => {
-                  deletechat("User has been Reported");
+                  setConfirmMessage(
+                    "Are you sure you want to report this user ?"
+                  );
+                  setShowConfirm(true);
+                  setfnc("ReportUser");
+                  setShowdrop(false);
                 }}
                 text="Report user"
               />
@@ -265,6 +322,19 @@ export default function Details(props) {
           </div>
         </div>
       )}
+      {
+        <Confirm
+          visible={showConfirm}
+          hide={() => {
+            setShowConfirm(false);
+          }}
+          message={confirmMessage}
+          yes={() => {
+            cont(fnc);
+            setShowConfirm(false);
+          }}
+        />
+      }
     </div>
   );
 }
