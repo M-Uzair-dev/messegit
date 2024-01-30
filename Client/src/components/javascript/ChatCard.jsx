@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../pages/css/innerpages.css";
 import { useSelector } from "react-redux";
+import defaultpic from "../../images/userpfp.jpg";
 
 export default function ChatCard({
   pfp,
@@ -62,9 +63,9 @@ export default function ChatCard({
         style={nowrap ? { width: "100%" } : {}}
       >
         <div className="cardleftdiv">
-          <img src={pfp} alt="user image" />
+          <img src={pfp || defaultpic} alt="user image" />
           <div>
-            <h3>{name}</h3>
+            <h3>{name || "User's name"}</h3>
             {username ? <p>{username}</p> : <p>{latestMessage}</p>}
           </div>
         </div>

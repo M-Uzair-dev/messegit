@@ -10,6 +10,7 @@ import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import Confirm from "./confirm";
+import AddUsers from "./AddUsers";
 
 export default function Chat(props) {
   //------------------------------- Variables and Hooks --------------------------------------------
@@ -480,6 +481,7 @@ export default function Chat(props) {
           }}
         />
       }
+      <AddUsers/>
     </div>
   );
 }

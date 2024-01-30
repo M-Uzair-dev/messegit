@@ -1,0 +1,63 @@
+.addUsers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.103);
+  align-items: center;
+  justify-content: center;
+}
+.blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(2px);
+  z-index: 70;
+}
+.addcard {
+  background-color: rgb(230, 230, 230);
+  max-width: 80%;
+  min-width: 350px;
+  padding: 10px;
+  border-radius: 20px;
+  z-index: 75;
+  color: black;
+  height: 530px;
+  position: relative;
+  box-shadow: 0px 0px 60px 18px rgba(0, 0, 0, 0.2);
+}
+.addpagecards {
+  max-height: 290px;
+  overflow-y: scroll;
+}
+.butdiv {
+  margin: 20px 0 5px 0;
+  position: absolute;
+  bottom: 0;
+  left: 5%;
+  width: 90%;
+}
+.addcard > h1 {
+  text-align: center;
+}
+.inputDivadd {
+  width: 95% !important;
+  margin: auto;
+}
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  cursor: pointer;
+}
+@media (max-width: 730px) {
+  .addcard {
+    min-width: 0px !important;
+    max-width: 95%;
+    width: 88%;
+  }
+}
