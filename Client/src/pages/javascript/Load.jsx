@@ -30,9 +30,7 @@ export default function Load() {
         <Outlet />
       ) : (
         <div className="loadingpage">
-          <div className="logoDiv">
-            <img src={logo} alt="Logo" />
-          </div>
+          <div className="logoDiv"></div>
         </div>
       )}
     </>

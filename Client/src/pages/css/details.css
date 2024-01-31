@@ -10,7 +10,6 @@
   background-color: #f0f0f0;
   z-index: 20;
   font-family: "Poppins", sans-serif;
-  overflow-y: scroll;
 }
 .detailsPageWrapper {
   position: relative;
@@ -75,6 +74,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.scroll {
+  overflow-y: scroll;
 }
 @media (max-width: 842px) {
   .users {

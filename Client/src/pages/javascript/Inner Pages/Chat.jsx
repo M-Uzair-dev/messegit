@@ -29,11 +29,11 @@ export default function Chat(props) {
   const [messeges, setMesseges] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isGroup, setIsGroup] = useState(false);
-
   const [admin, setAdmin] = useState("");
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showaddUsers, setShowAddUsers] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
   const [fnc, setfnc] = useState("");
 
@@ -301,7 +301,14 @@ export default function Chat(props) {
                 {isGroup ? (
                   admin === user.id ? (
                     <div className="dropmenu">
-                      <p>Add members</p>
+                      <p
+                        onClick={() => {
+                          setShowdrop(false);
+                          setShowAddUsers(true);
+                        }}
+                      >
+                        Add members
+                      </p>
                       <p
                         onClick={() => {
                           setConfirmMessage(
@@ -459,6 +466,11 @@ export default function Chat(props) {
               value={messege}
               placeholder="Type here..."
               className="messegeInput"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  messege.length === 0 ? null : addMessege();
+                }
+              }}
             />
             <SendIcon
               onClick={() => {
@@ -468,20 +480,25 @@ export default function Chat(props) {
           </div>
         </div>
       )}
-      {
-        <Confirm
-          visible={showConfirm}
-          hide={() => {
-            setShowConfirm(false);
-          }}
-          message={confirmMessage}
-          yes={() => {
-            cont(fnc);
-            setShowConfirm(false);
-          }}
-        />
-      }
-      <AddUsers/>
+
+      <Confirm
+        visible={showConfirm}
+        hide={() => {
+          setShowConfirm(false);
+        }}
+        message={confirmMessage}
+        yes={() => {
+          cont(fnc);
+          setShowConfirm(false);
+        }}
+      />
+
+      <AddUsers
+        visible={showaddUsers}
+        hide={() => {
+          setShowAddUsers(false);
+        }}
+      />
     </div>
   );
 }

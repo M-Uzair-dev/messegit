@@ -50,6 +50,8 @@ const Signup = () => {
       enqueueSnackbar("Email is required", { variant: "error" });
     } else if (finaldata.password === "") {
       enqueueSnackbar("Password is required", { variant: "error" });
+    } else if (finaldata.name === "") {
+      enqueueSnackbar("Name is required", { variant: "error" });
     } else {
       try {
         if (finaldata.about === "") {

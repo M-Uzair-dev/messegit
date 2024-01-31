@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { TailSpin } from "react-loader-spinner";
 import Confirm from "./confirm";
+import AddUsers from "./AddUsers";
 
 export default function Details(props) {
   const { id } = useParams();
@@ -27,6 +28,9 @@ export default function Details(props) {
   const [imageurl, setImageurl] = useState("");
   const [admin, setAdmin] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
+  const [reloadEffect, setReloadEffect] = useState(false);
+
+  const [showaddUsers, setShowAddUsers] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
   const [fnc, setfnc] = useState("");
 
@@ -61,7 +65,7 @@ export default function Details(props) {
             setGroup(true);
             let details = result.details;
             const index = details.members.findIndex(
-              (obj) => obj.id === details.admin
+              (obj) => obj._id === details.admin
             );
             const targetObject = details.members.splice(index, 1)[0];
             const sortedArray = [targetObject, ...details.members];
@@ -88,7 +92,7 @@ export default function Details(props) {
     };
 
     fetchData();
-  }, [props.visible]);
+  }, [props.visible, reloadEffect]);
 
   let deletechat = async (message) => {
     try {
@@ -179,7 +183,7 @@ export default function Details(props) {
 
   return (
     <div
-      className="DetailsPage"
+      className={showaddUsers ? "DetailsPage" : "DetailsPage scroll"}
       style={props.visible ? { display: "block" } : { display: "none" }}
     >
       {loading ? (
@@ -214,15 +218,15 @@ export default function Details(props) {
             {users.map((e) => {
               return (
                 <ChatCard
-                  key={e.id}
-                  pfp={e.imageur || pfp}
+                  key={e._id}
+                  pfp={e.imageurl || pfp}
                   name={e.name}
                   id={""}
                   onclick={() => {
                     console.log(e._id + "||||||" + admin);
                   }}
                   username={e.username}
-                  admin={e.id === admin}
+                  admin={e._id === admin}
                 />
               );
             })}
@@ -230,7 +234,9 @@ export default function Details(props) {
               <div className="buttons">
                 <Button
                   theme="gradient"
-                  submit={() => {}}
+                  submit={() => {
+                    setShowAddUsers(true);
+                  }}
                   text="Manage Users"
                 />
                 <Button
@@ -322,19 +328,24 @@ export default function Details(props) {
           </div>
         </div>
       )}
-      {
-        <Confirm
-          visible={showConfirm}
-          hide={() => {
-            setShowConfirm(false);
-          }}
-          message={confirmMessage}
-          yes={() => {
-            cont(fnc);
-            setShowConfirm(false);
-          }}
-        />
-      }
+      <Confirm
+        visible={showConfirm}
+        hide={() => {
+          setShowConfirm(false);
+        }}
+        message={confirmMessage}
+        yes={() => {
+          cont(fnc);
+          setShowConfirm(false);
+        }}
+      />
+      <AddUsers
+        visible={showaddUsers}
+        hide={() => {
+          setShowAddUsers(false);
+          setReloadEffect(!reloadEffect);
+        }}
+      />
     </div>
   );
 }

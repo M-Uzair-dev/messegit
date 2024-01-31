@@ -52,14 +52,7 @@
   border-radius: 50%;
   overflow: hidden;
   border-top: 3px solid #5b59c9;
-  animation: spin 1s linear 0s infinite;
-}
-
-.logoDiv img {
-  height: 100%;
-  width: 100%;
-
-  animation: spin 1s linear 0s infinite reverse;
+  animation: spin 0.5s linear 0s infinite;
 }
 .chatdivmain {
   display: none;

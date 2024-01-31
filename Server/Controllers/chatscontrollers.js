@@ -152,30 +152,45 @@ module.exports.creategroup = async (req, res) => {
 };
 
 module.exports.addMembers = (req, res) => {
-  const id = req.body.chatID;
-  const members = req.body.members;
+  try {
+    const id = req.body.id;
+    const members = req.body.members;
 
-  if (!id || !members) {
-    return res.status(400).json({
+    if (!id || !members) {
+      return res.status(400).json({
+        success: false,
+        error: "Input fields are empty or not provided",
+      });
+    }
+
+    chatModel
+      .findByIdAndUpdate(id, { $set: { members } }, { new: true })
+      .then((updatedChat) => {
+        if (!updatedChat) {
+          return res.status(404).json({
+            success: false,
+            error: "Chat could not be found!",
+          });
+        }
+        return res.status(200).json({
+          success: true,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).json({
+          success: false,
+        });
+      });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({
       success: false,
-      error: "Input fields are empty or not provided",
+      error: "An unexpected error occurred",
     });
   }
-
-  chatModel
-    .findByIdAndUpdate(id, { $push: { members: members } })
-    .then(() => {
-      return res.status(200).json({
-        success: true,
-        message: `Member added successfully`,
-      });
-    })
-    .catch((err) => {
-      return res
-        .status(404)
-        .json({ success: false, error: "Chat could not be found!" });
-    });
 };
+
 module.exports.getDetails = async (req, res) => {
   let chatID = req.body.chatID;
   let userID = req.body.userID;
@@ -192,7 +207,7 @@ module.exports.getDetails = async (req, res) => {
         users.map(async (memberID) => {
           const user = await usermodel.findById(memberID);
           return {
-            id: user._id,
+            _id: user._id,
             name: user.name,
             image: user.imageurl,
             username: user.username,

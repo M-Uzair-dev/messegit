@@ -29,21 +29,23 @@ export default function CreateGroup(props) {
   const [confirmMessage, setConfirmMessage] = useState("");
 
   const addUser = (user) => {
-    if (members.includes(user._id)) {
-      let newmembers = members.filter((item) => item !== user._id);
-      setMembers(newmembers);
-    } else {
-      setMembers([...members, user._id]);
-    }
+    const user_id = user._id;
 
-    if (users.length === 0) {
-      setUsers([user]);
-    } else {
-      setUsers([...users, user]);
-    }
+    const newMembers = members.includes(user_id)
+      ? members.filter((item) => item !== user_id)
+      : [...members, user_id];
+
+    const newUsers = users.includes(user)
+      ? users.filter((item) => item._id !== user_id)
+      : [...users, user];
+
+    setMembers(newMembers);
+    setUsers(newUsers);
+
+    console.log(users);
   };
 
-  const createGroup = async (id) => {
+  const createGroup = async () => {
     try {
       const res = await fetch("http://localhost:5000/chats/newgroup", {
         method: "POST",
@@ -80,8 +82,12 @@ export default function CreateGroup(props) {
     if (inputval === "") {
       if (users.length === 0) {
         setNoresults(true);
+        setData([]);
+        setUsers([]);
+        setMembers([]);
         return;
       } else {
+        setNoresults(false);
         setData(users);
         return;
       }
@@ -107,11 +113,8 @@ export default function CreateGroup(props) {
         const result = await res.json();
 
         if (result.NoUser) {
-          if (!users || users.length === 0) {
-            setNoresults(true);
-          } else {
-            setData(users);
-          }
+          setNoresults(true);
+          setData([]);
           setLoading(false);
           return;
         }
