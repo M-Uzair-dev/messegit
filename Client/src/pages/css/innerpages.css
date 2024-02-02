@@ -125,6 +125,7 @@
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
+  position: relative;
   cursor: pointer;
 }
 .card:hover {
@@ -147,14 +148,16 @@
   border: 2px solid #7b63ec;
 }
 .badge {
-  height: 30px !important;
+  height: 25px !important;
   padding: 0;
-  width: 30px;
+  width: 25px;
   background-color: #7b63ec;
   color: white;
   text-align: center;
   border-radius: 50%;
   display: flex;
+  font-size: 16px;
+  transform: translateY(10px);
   align-items: center;
   justify-content: center;
 }
@@ -289,6 +292,8 @@
   border-radius: 10px;
   color: white;
   box-sizing: border-box;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 .yes {
   display: flex;
@@ -503,7 +508,8 @@
 }
 .admin {
   width: max-content;
-  padding: 0 5px;
+  padding: 5px;
+  height: max-content;
   background-color: #7c63ecb0;
   border-radius: 10px;
   font-size: 14px;
@@ -513,4 +519,17 @@
 .admin > p {
   margin: 0;
   padding: 0;
+  color: white;
+}
+.date p {
+  margin: 0;
+  padding: 0;
+  color: #a99ebfb3;
+  font-size: 15px;
+}
+.date {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  height: max-content;
 }

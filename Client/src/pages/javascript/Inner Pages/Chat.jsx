@@ -1,7 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import pfp from "../../../images/userpfp.jpg";
 import SendIcon from "@mui/icons-material/Send";
 import logo from "../../../images/transparentlogo.png";
 import CloseIcon from "@mui/icons-material/Close";
@@ -11,6 +10,7 @@ import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import Confirm from "./confirm";
 import AddUsers from "./AddUsers";
+import io from "socket.io-client";
 
 export default function Chat(props) {
   //------------------------------- Variables and Hooks --------------------------------------------
@@ -36,8 +36,59 @@ export default function Chat(props) {
   const [showaddUsers, setShowAddUsers] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
   const [fnc, setfnc] = useState("");
+  const [socket, setSocket] = useState(null);
+  const socketInitialized = useRef(false);
+  const [prevId, setPrevId] = useState("");
 
   // --------------------------------  UseEffects -----------------------------------------------
+
+  const handlerecieve = useCallback(
+    (data) => {
+      if (user.id && messeges) {
+        const isCurrentUser = user.id === data.senderID;
+        if (!isCurrentUser && prevId !== data._id) {
+          fetch("http://localhost:5000/messages/seen", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              chatID: id,
+              userID: user.id,
+            }),
+          });
+          setMesseges((prevMessages) => [...prevMessages, data]);
+          setPrevId(data._id);
+        }
+      }
+    },
+    [id, user.id]
+  );
+
+  useEffect(() => {
+    const socketInstance = io("http://localhost:5000");
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+      socketInitialized.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (socket && id) {
+      if (!socketInitialized.current) {
+        socket.emit("joinRoom", { roomId: id });
+        socketInitialized.current = true;
+      } else {
+        socketInitialized.current = false;
+      }
+
+      socket.on("receiveMessage", (data) => {
+        handlerecieve(data);
+      });
+    }
+  }, [socket, id, handlerecieve, user.id]);
 
   useEffect(() => {
     setLoading(true);
@@ -67,6 +118,7 @@ export default function Chat(props) {
           if (result.message === "No messages found") {
             if (result.group) {
               setAdmin(result.admin);
+              setImage(result.data.imageurl);
             }
 
             if (result.data.name) {
@@ -76,9 +128,9 @@ export default function Chat(props) {
                 (userObj) => userObj.id !== user.id
               );
               setName(updatedData[0].name);
+              setImage(updatedData[0].imageurl);
             }
             setIsGroup(result.group);
-            setImage(result.image);
             setLoading(false);
             return;
           }
@@ -86,6 +138,7 @@ export default function Chat(props) {
         } else {
           if (result.group) {
             setAdmin(result.admin);
+            setImage(result.data.imageurl);
           }
           if (result.data.name) {
             setName(result.data.name);
@@ -94,9 +147,9 @@ export default function Chat(props) {
               (userObj) => userObj.id !== user.id
             );
             setName(updatedData[0].name);
+            setImage(updatedData[0].imageurl);
           }
           setIsGroup(result.group);
-          setImage(result.image);
           setMesseges(result.messages);
           setLoading(false);
         }
@@ -181,7 +234,18 @@ export default function Chat(props) {
       enqueueSnackbar("An error occured.", { variant: "error" });
     }
   };
+  function generateRandomString(length) {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
 
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      result += characters.charAt(randomIndex);
+    }
+
+    return result;
+  }
   let addMessege = async () => {
     if (messege === "") {
       enqueueSnackbar("Empty messege.", { variant: "error" });
@@ -210,8 +274,27 @@ export default function Chat(props) {
       if (result.success === false) {
         throw new Error("An unexpected error occurred!");
       }
-      setMesseges([...messeges, { content: messege, senderID: user.id }]);
       setMessege("");
+      setMesseges([
+        ...messeges,
+        {
+          content: messege,
+          user: user.username,
+          senderID: user.id,
+          _id: generateRandomString(20),
+        },
+      ]);
+      if (socket && id && messege.trim() !== "") {
+        socket.emit("sendMessage", {
+          roomId: id,
+          data: {
+            content: messege,
+            username: user.username,
+            senderID: user.id,
+            _id: generateRandomString(20),
+          },
+        });
+      }
     } catch (e) {
       navigate("/chats");
       enqueueSnackbar("An error occured.", { variant: "error" });
@@ -267,7 +350,10 @@ export default function Chat(props) {
             </div>
             <div className="barleftdiv">
               <img
-                src={image || pfp}
+                src={
+                  image ||
+                  `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${id}`
+                }
                 alt="user image"
                 style={
                   isGroup
@@ -289,7 +375,7 @@ export default function Chat(props) {
               </div>
             </div>
           </div>
-          <div className="dots">
+          <div className="dots" onClick={() => {}}>
             {showdrop ? (
               <>
                 <CloseIcon
@@ -435,7 +521,7 @@ export default function Chat(props) {
             {messeges.map((e) => {
               return (
                 <div
-                  key={e.createdAt}
+                  key={e._id}
                   className={
                     ("messegeDiv", e.senderID === user.id ? "yes" : "no")
                   }

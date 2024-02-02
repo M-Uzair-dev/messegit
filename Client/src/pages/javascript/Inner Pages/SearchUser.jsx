@@ -150,7 +150,7 @@ export default function SearchUser(props) {
           data.map((e) => (
             <ChatCard
               key={e._id}
-              pfp={e.pfp || pfp}
+              pfp={e.imageurl || pfp}
               name={e.username || "User's name"}
               message={""}
               nowrap={true}

@@ -54,6 +54,7 @@ export default function Chats(props) {
           if (result.success === false) {
             throw new Error("An unexpected error occurred!");
           } else {
+            console.log(result);
             let updated = await result.chats.map((chat) => {
               let updatedData = chat.data.filter(
                 (userObj) => userObj.id !== user.id
@@ -84,7 +85,7 @@ export default function Chats(props) {
           <div className="InnerLeftTopBarRight">
             <SettingsRoundedIcon titleAccess="Settings" className="settings" />
             <img
-              src={pfp}
+              src={user.imageurl}
               alt="profile"
               onClick={() => {
                 props.showprofilepage();
@@ -142,9 +143,10 @@ export default function Chats(props) {
             return e.isGroup ? (
               <ChatCard
                 key={e._id}
-                pfp={e.imageurl || pfp}
+                date={e.updatedAt}
+                pfp={e.image}
                 name={e.name || "User's name"}
-                id={e._id}
+                ChatId={e._id}
                 onclick={() => {
                   props.hidedetailspage();
                   navigate(`/chats/${e._id}`);
@@ -154,9 +156,10 @@ export default function Chats(props) {
             ) : (
               <ChatCard
                 key={e._id}
-                pfp={e.data[0].imageurl || pfp}
+                date={e.updatedAt}
+                pfp={e.data[0].imageurl}
                 name={e.data[0].name || "User's name"}
-                id={e._id}
+                ChatId={e._id}
                 onclick={() => {
                   props.hidedetailspage();
                   navigate(`/chats/${e._id}`);

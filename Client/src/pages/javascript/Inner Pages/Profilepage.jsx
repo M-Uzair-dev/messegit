@@ -46,7 +46,7 @@ export default function Profilepage(props) {
           name: result.user.name,
           username: result.user.username,
           id: result.user._id,
-          imageurl: result.user.imageUrl,
+          imageurl: result.user.image,
           about: result.user.about,
         };
         dispatch(setUser(temp));
@@ -73,7 +73,11 @@ export default function Profilepage(props) {
       />
       <h1 className="heading">Profile</h1>
       <div className="pfpcont">
-        <img src={pfp} alt="profile Image" className="profileimage" />
+        <img
+          src={user.imageurl || pfp}
+          alt="profile Image"
+          className="profileimage"
+        />
         <div className="hover">
           <CameraAltOutlinedIcon />{" "}
         </div>

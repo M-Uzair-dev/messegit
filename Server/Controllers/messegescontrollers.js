@@ -62,6 +62,36 @@ module.exports.getmesseges = async (req, res) => {
   }
 };
 
+module.exports.seen = async (req, res) => {
+  try {
+    const chatID = req.body.chatID;
+    const userID = req.body.userID;
+    if (!chatID || !userID) {
+      throw new Error("IDs are required");
+    }
+
+    const messages = await messegesModel.find({ chatID });
+    const user = await usermodel.findById(userID);
+    const chat = await chatsmodel.findById(chatID);
+    if (!user || !chat) {
+      return res.status(500).json({ success: false, message: "User invalid" });
+    }
+    if (messages && messages.length > 0) {
+      const updatedMessages = messages.map((message) => {
+        if (!message.seenBy.includes(userID)) {
+          message.seenBy.push(userID);
+        }
+        return message;
+      });
+
+      await Promise.all(updatedMessages.map((message) => message.save()));
+    }
+  } catch (e) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
 module.exports.getNewMessagesCount = async (req, res) => {
   try {
     const chatID = req.body.chatId;

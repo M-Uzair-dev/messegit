@@ -55,6 +55,7 @@ module.exports.signup = async (req, res, next) => {
     const user = await userModel.create({
       ...req.body,
       password: hashedPassword,
+      imageurl: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${req.body.username}`,
     });
 
     const token = createToken(user._id);

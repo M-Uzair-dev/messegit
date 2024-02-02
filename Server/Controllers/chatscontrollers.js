@@ -139,6 +139,7 @@ module.exports.creategroup = async (req, res) => {
       isGroup: true,
       admin: userID,
       name,
+      imageurl: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${name}`,
     });
     await chat.save();
 

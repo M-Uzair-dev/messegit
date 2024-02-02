@@ -14,7 +14,6 @@ import AddUsers from "./AddUsers";
 export default function Details(props) {
   const { id } = useParams();
   const navigate = useNavigate();
-  const chatContainerRef = useRef(null);
   const user = useSelector((state) => state.user);
   const { enqueueSnackbar } = useSnackbar();
   const refresh = localStorage.getItem("refresh");
@@ -74,6 +73,7 @@ export default function Details(props) {
             setName(details.name);
             setAdmin(details.admin);
           } else {
+            setGroup(false);
             let user = result.user;
             if (!user) throw new error("User is not present");
             setName(user.name);
@@ -92,7 +92,7 @@ export default function Details(props) {
     };
 
     fetchData();
-  }, [props.visible, reloadEffect]);
+  }, [props.visible, reloadEffect, id]);
 
   let deletechat = async (message) => {
     try {
@@ -210,16 +210,23 @@ export default function Details(props) {
             <ArrowBackIcon />
           </div>
           <div className="image detailsContainer">
-            <img src={pfp} alt="Profile image" />
+            <img
+              src={
+                imageurl ||
+                `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${id}`
+              }
+              alt="Profile image"
+            />
             <h1>{name}</h1>
           </div>
           <div className="users">
             <h1>Members : </h1>
             {users.map((e) => {
+              console.log(e);
               return (
                 <ChatCard
                   key={e._id}
-                  pfp={e.imageurl || pfp}
+                  pfp={e.image || pfp}
                   name={e.name}
                   id={""}
                   onclick={() => {
@@ -293,7 +300,13 @@ export default function Details(props) {
             <ArrowBackIcon />
           </div>
           <div className="image detailsContainer">
-            <img src={pfp} alt="Profile image" />
+            <img
+              src={
+                imageurl ||
+                `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${id}`
+              }
+              alt="Profile image"
+            />
             <h1>{name}</h1>
             <p>{username}</p>
             <p>{about}</p>

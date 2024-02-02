@@ -41,11 +41,12 @@ export default function Protected() {
           removeCookie("jwt");
           navigate("/login");
         }
+        console.log(data);
         let temp = {
           name: data.user.name,
           username: data.user.username,
           id: data.user._id,
-          imageurl: data.user.imageUrl,
+          imageurl: data.user.imageurl,
           about: data.user.about,
         };
         dispatch(setUser(temp));

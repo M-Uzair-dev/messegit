@@ -1,26 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../../pages/css/innerpages.css";
 import { useSelector } from "react-redux";
 import defaultpic from "../../images/userpfp.jpg";
+import { useParams } from "react-router-dom";
+import io from "socket.io-client";
 
 export default function ChatCard({
   pfp,
   name,
-  id,
+  ChatId,
   nowrap,
   onclick,
   isGroup,
   username,
   admin,
+  date,
 }) {
-  const [count, setcount] = useState(0);
-  const [latestMessage, setlatestMessage] = useState("");
+  const { id } = useParams();
+  const [count, setCount] = useState(0);
+  const [latestMessage, setLatestMessage] = useState("");
+  const [dateState, setDateState] = useState(date);
   const user = useSelector((state) => state.user);
+  const isMounted = useRef(false);
+  const socket = useRef(io("http://localhost:5000"));
+
+  const receiveMessageHandler = useCallback(
+    (data) => {
+      if (isMounted.current) {
+        setLatestMessage(data?.content);
+        setDateState(new Date());
+        if (id === undefined || id !== ChatId) {
+          console.log(data);
+          setCount((prev) => prev + 1);
+        }
+      }
+    },
+    [id, ChatId]
+  );
+
+  useEffect(() => {
+    if (socket.current && ChatId && !isMounted.current) {
+      socket.current.emit("joinRoom", { roomId: ChatId });
+      isMounted.current = true;
+    }
+
+    socket.current.on("receiveMessage", receiveMessageHandler);
+
+    return () => {
+      socket.current.off("receiveMessage", receiveMessageHandler);
+    };
+  }, [id, ChatId, receiveMessageHandler]);
 
   useEffect(() => {
     const getCount = async () => {
       try {
-        if (!user.id || !id) return;
+        if (!user.id || !ChatId) return;
 
         const res = await fetch("http://localhost:5000/messages/getcount", {
           method: "POST",
@@ -28,10 +62,11 @@ export default function ChatCard({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            chatId: id,
+            chatId: ChatId,
             userId: user.id,
           }),
         });
+
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
@@ -44,46 +79,85 @@ export default function ChatCard({
           }
           throw new Error("An unexpected error occurred!");
         } else {
-          setcount(result.newMessageCount);
-          setlatestMessage(result.latestMessage);
+          if (isMounted.current && id !== ChatId) {
+            setCount(result.newMessageCount);
+          }
+          setLatestMessage(result.latestMessage);
         }
       } catch (e) {
         console.log(e);
       }
     };
-    getCount();
-  }, []);
-  return (
-    <div>
-      <div
-        onClick={() => {
-          onclick ? onclick() : null;
-        }}
-        className={isGroup ? "group card" : "card"}
-        style={nowrap ? { width: "100%" } : {}}
-      >
-        <div className="cardleftdiv">
-          <img src={pfp || defaultpic} alt="user image" />
-          <div>
-            <h3>{name || "User's name"}</h3>
-            {username ? <p>{username}</p> : <p>{latestMessage}</p>}
-          </div>
-        </div>
 
-        {admin ? (
-          <div className="admin badge">
-            <p>ADMIN</p>
+    getCount();
+  }, [id, ChatId, user.id]);
+
+  useEffect(() => {
+    if (id === ChatId) {
+      setCount(0);
+    }
+  }, [id, ChatId]);
+
+  function formatDate(inputDate) {
+    const currentDate = new Date();
+    const inputDateTime = new Date(inputDate);
+    const timeDifference = currentDate - inputDateTime;
+    const twentyFourHoursInMilliseconds = 24 * 60 * 60 * 1000;
+
+    if (timeDifference < twentyFourHoursInMilliseconds) {
+      const formattedTime = inputDateTime.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      return formattedTime.toLowerCase();
+    } else {
+      const formattedDate = `${
+        inputDateTime.getMonth() + 1
+      }/${inputDateTime.getDate()}/${inputDateTime.getFullYear()}`;
+      return formattedDate;
+    }
+  }
+
+  return (
+    <div
+      onClick={() => (onclick ? onclick() : null)}
+      className={isGroup ? "group card" : "card"}
+      style={nowrap ? { width: "100%" } : {}}
+    >
+      <div className="cardleftdiv">
+        <img
+          src={
+            pfp ||
+            `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${ChatId}`
+          }
+          alt="user image"
+        />
+        <div>
+          <h3>{name || "User's name"}</h3>
+          {username ? <p>{username}</p> : <p>{latestMessage}</p>}
+        </div>
+      </div>
+
+      {admin ? (
+        <div className="admin">
+          <p>ADMIN</p>
+        </div>
+      ) : count === 0 ? (
+        <div className="date">
+          <p>{date ? formatDate(dateState) : ""}</p>
+        </div>
+      ) : count ? (
+        <>
+          <div className="date">
+            <p>{date ? formatDate(dateState) : ""}</p>
           </div>
-        ) : count === 0 ? (
-          <></>
-        ) : count ? (
           <div className="badge">
             <p>{count}</p>
           </div>
-        ) : (
-          <></>
-        )}
-      </div>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
