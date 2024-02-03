@@ -42,9 +42,7 @@ const io = socketIo(server, {
 
 io.on("connection", (socket) => {
   socket.on("joinRoom", ({ roomId }) => {
-    console.log(roomId);
     socket.join(roomId);
-    console.log(`User joined room: ${roomId}`);
   });
 
   // Change the event data structure to send an object with message and username
@@ -53,9 +51,7 @@ io.on("connection", (socket) => {
     io.to(roomId).emit("receiveMessage", data);
   });
 
-  socket.on("disconnect", () => {
-    console.log("User disconnected");
-  });
+  socket.on("disconnect", () => {});
 });
 
 app.use("/chats", chatsRoute);

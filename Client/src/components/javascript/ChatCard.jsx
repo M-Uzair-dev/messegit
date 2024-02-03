@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../../pages/css/innerpages.css";
 import { useSelector } from "react-redux";
-import defaultpic from "../../images/userpfp.jpg";
+import defaultpfp from "../../images/defaultpic.jpg";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 
@@ -125,13 +125,7 @@ export default function ChatCard({
       style={nowrap ? { width: "100%" } : {}}
     >
       <div className="cardleftdiv">
-        <img
-          src={
-            pfp ||
-            `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${ChatId}`
-          }
-          alt="user image"
-        />
+        <img src={pfp || defaultpfp} alt="user image" />
         <div>
           <h3>{name || "User's name"}</h3>
           {username ? <p>{username}</p> : <p>{latestMessage}</p>}

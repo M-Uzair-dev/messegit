@@ -12,7 +12,7 @@ module.exports.getchats = async (req, res) => {
 
     const chats = await chatModel
       .find({ members: { $in: [userID] } })
-      .sort({ updatedAt: -1 }); // Sort by updatedAt in descending order
+      .sort({ updatedAt: -1 });
 
     if (chats && chats.length > 0) {
       return res.status(200).json({ success: true, chats });
@@ -139,7 +139,7 @@ module.exports.creategroup = async (req, res) => {
       isGroup: true,
       admin: userID,
       name,
-      imageurl: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${name}`,
+      imageurl: `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${name}`,
     });
     await chat.save();
 
@@ -210,7 +210,7 @@ module.exports.getDetails = async (req, res) => {
           return {
             _id: user._id,
             name: user.name,
-            image: user.imageurl,
+            imageurl: user.imageurl,
             username: user.username,
           };
         })
@@ -218,7 +218,7 @@ module.exports.getDetails = async (req, res) => {
 
       const details = {
         name: chat.name,
-        image: chat.imageurl,
+        imageurl: chat.imageurl,
         admin: chat.admin,
         members: userDetails,
       };

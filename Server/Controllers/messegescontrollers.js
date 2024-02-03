@@ -37,7 +37,7 @@ module.exports.getmesseges = async (req, res) => {
         group: chat.isGroup,
         admin: chat.admin,
         data,
-        image: chat.imageurl,
+        imageurl: chat.imageurl,
       });
     } else {
       let data;
@@ -52,7 +52,7 @@ module.exports.getmesseges = async (req, res) => {
         group: chat.isGroup,
         admin: chat.admin,
         data,
-        image: chat.imageurl,
+        imageurl: chat.imageurl,
       });
     }
   } catch (e) {

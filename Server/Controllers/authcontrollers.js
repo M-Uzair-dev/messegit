@@ -1,4 +1,5 @@
 const userModel = require("../Models/usermodel");
+const chatModel = require("../Models/chatsmodel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -83,16 +84,33 @@ module.exports.editUser = async (req, res, next) => {
   try {
     const userId = req.body.id;
     const updatedFields = req.body.updatedFields;
-    const user = await userModel.findById(userId);
+    console.log(userId, updatedFields);
 
+    const user = await userModel.findById(userId);
     if (!user) {
       throw new Error("User not found");
     }
     Object.assign(user, updatedFields);
     await user.save();
 
+    const chats = await chatModel.find({ members: userId });
+
+    for (const chat of chats) {
+      const data = chat.data || [];
+
+      for (const memberData of data) {
+        if (memberData.id === userId) {
+          Object.assign(memberData, updatedFields);
+        }
+      }
+
+      // Mark the 'data' array as modified before saving
+      chat.markModified("data");
+      await chat.save();
+      console.log("Chat saved successfully");
+    }
+
     res.status(200).json({ success: true, user });
-    console.log(user);
   } catch (err) {
     console.log(err);
     res.status(400).json({ success: false, errorMessage: err.message });

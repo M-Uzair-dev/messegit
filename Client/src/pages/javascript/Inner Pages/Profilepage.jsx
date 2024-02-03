@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import Input from "../../../components/javascript/Input";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import pfp from "../../../images/userpfp.jpg";
+import pfp from "../../../images/defaultpic.jpg";
 import "../../css/pages.css";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "../../../components/javascript/Button";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import { setUser } from "../../../Redux/Features/userSlice";
 import { useSnackbar } from "notistack";
+import firebase from "firebase/compat/app";
+import { TailSpin } from "react-loader-spinner";
+import "firebase/compat/storage";
 
 export default function Profilepage(props) {
   const user = useSelector((state) => state.user);
@@ -17,6 +20,91 @@ export default function Profilepage(props) {
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [pfploading, setPfploading] = useState(false);
+
+  let uploadimg = async (event) => {
+    setPfploading(true);
+    try {
+      const selectedFile = event.target.files[0];
+
+      if (!selectedFile) {
+        enqueueSnackbar("No files selected", {
+          variant: "error",
+        });
+        setPfploading(false);
+        return;
+      }
+
+      const allowedTypes = ["image/jpeg", "image/png"];
+      if (!allowedTypes.includes(selectedFile.type)) {
+        enqueueSnackbar("Invalid file type. Only png and jpg are allowed.", {
+          variant: "error",
+        });
+        setPfploading(false);
+        return;
+      }
+
+      const maxFileSize = 5 * 1024 * 1024;
+      if (selectedFile.size > maxFileSize) {
+        enqueueSnackbar("Image cannot be larger than 5MB", {
+          variant: "error",
+        });
+        setPfploading(false);
+        return;
+      }
+
+      const uniqueFilename = `${Date.now()}_${selectedFile.name}`;
+
+      const storageRef = firebase.storage().ref("images");
+      const fileRef = storageRef.child(uniqueFilename);
+
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(selectedFile);
+      fileReader.onload = () => {
+        fileRef.putString(fileReader.result, "data_url").then((snapshot) => {
+          snapshot.ref.getDownloadURL().then(async (url) => {
+            console.log("File uploaded successfully:", url);
+            let res = await fetch("http://localhost:5000/auth/update", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                updatedFields: {
+                  imageurl: url,
+                },
+                id: user.id,
+              }),
+            });
+            if (!res.ok) {
+              throw new Error(`HTTP error! Status: ${res.status}`);
+            }
+            let result = await res.json();
+            if (result.success === false) {
+              throw new Error(`HTTP error! Status: ${res.status}`);
+            } else {
+              let temp = {
+                name: result.user.name,
+                username: result.user.username,
+                id: result.user._id,
+                about: result.user.about,
+              };
+              dispatch(setUser(temp));
+              enqueueSnackbar("Image uploaded Successfully.", {
+                variant: "success",
+              });
+              setPfploading(false);
+            }
+          });
+        });
+      };
+    } catch (error) {
+      enqueueSnackbar("An error occured :-(", {
+        variant: "error",
+      });
+      setPfploading(false);
+    }
+  };
 
   let saveUser = async () => {
     setLoading(true);
@@ -46,9 +134,10 @@ export default function Profilepage(props) {
           name: result.user.name,
           username: result.user.username,
           id: result.user._id,
-          imageurl: result.user.image,
+          imageurl: result.user.imageurl,
           about: result.user.about,
         };
+        console.log(temp);
         dispatch(setUser(temp));
         enqueueSnackbar("Profile Updated Successfully.", {
           variant: "success",
@@ -79,7 +168,26 @@ export default function Profilepage(props) {
           className="profileimage"
         />
         <div className="hover">
-          <CameraAltOutlinedIcon />{" "}
+          {pfploading ? (
+            <TailSpin
+              visible={true}
+              height="30"
+              width="30"
+              color="white"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+          ) : (
+            <CameraAltOutlinedIcon />
+          )}
+          <input
+            type="file"
+            onChange={(e) => {
+              uploadimg(e);
+            }}
+          />
         </div>
       </div>
       <div className="inputDiv profileinputdiv">

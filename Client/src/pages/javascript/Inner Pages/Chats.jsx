@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../css/innerpages.css";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import logo from "../../../images/transparentlogo.png";
-import pfp from "../../../images/userpfp.jpg";
+import pfp from "../../../images/defaultpic.jpg";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import ChatCard from "../../../components/javascript/ChatCard";
@@ -85,7 +85,7 @@ export default function Chats(props) {
           <div className="InnerLeftTopBarRight">
             <SettingsRoundedIcon titleAccess="Settings" className="settings" />
             <img
-              src={user.imageurl}
+              src={user.imageurl || pfp}
               alt="profile"
               onClick={() => {
                 props.showprofilepage();
@@ -144,7 +144,7 @@ export default function Chats(props) {
               <ChatCard
                 key={e._id}
                 date={e.updatedAt}
-                pfp={e.image}
+                pfp={e.imageurl || pfp}
                 name={e.name || "User's name"}
                 ChatId={e._id}
                 onclick={() => {
@@ -157,7 +157,7 @@ export default function Chats(props) {
               <ChatCard
                 key={e._id}
                 date={e.updatedAt}
-                pfp={e.data[0].imageurl}
+                pfp={e.data[0].imageurl || pfp}
                 name={e.data[0].name || "User's name"}
                 ChatId={e._id}
                 onclick={() => {

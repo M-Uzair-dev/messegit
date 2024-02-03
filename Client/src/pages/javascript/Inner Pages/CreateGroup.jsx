@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Input from "../../../components/javascript/Input";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChatCard from "../../../components/javascript/ChatCard";
-import pfp from "../../../images/userpfp.jpg";
+import pfp from "../../../images/defaultpic.jpg";
 import "../../css/pages.css";
 import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";

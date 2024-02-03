@@ -113,12 +113,13 @@ export default function Chat(props) {
         }
 
         const result = await res.json();
+        console.log(result);
 
         if (result.success === false) {
           if (result.message === "No messages found") {
             if (result.group) {
               setAdmin(result.admin);
-              setImage(result.data.imageurl);
+              setImage(result.imageurl);
             }
 
             if (result.data.name) {
@@ -138,7 +139,7 @@ export default function Chat(props) {
         } else {
           if (result.group) {
             setAdmin(result.admin);
-            setImage(result.data.imageurl);
+            setImage(result.imageurl);
           }
           if (result.data.name) {
             setName(result.data.name);

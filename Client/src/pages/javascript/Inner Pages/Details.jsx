@@ -1,5 +1,5 @@
 import "../../css/details.css";
-import pfp from "../../../images/userpfp.jpg";
+import pfp from "../../../images/defaultpic.jpg";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChatCard from "../../../components/javascript/ChatCard";
 import Button from "../../../components/javascript/Button";
@@ -72,6 +72,7 @@ export default function Details(props) {
 
             setName(details.name);
             setAdmin(details.admin);
+            setImageurl(details.imageurl);
           } else {
             setGroup(false);
             let user = result.user;
@@ -222,16 +223,13 @@ export default function Details(props) {
           <div className="users">
             <h1>Members : </h1>
             {users.map((e) => {
-              console.log(e);
               return (
                 <ChatCard
                   key={e._id}
-                  pfp={e.image || pfp}
+                  pfp={e.imageurl || pfp}
                   name={e.name}
                   id={""}
-                  onclick={() => {
-                    console.log(e._id + "||||||" + admin);
-                  }}
+                  onclick={() => {}}
                   username={e.username}
                   admin={e._id === admin}
                 />
