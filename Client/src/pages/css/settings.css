@@ -1,0 +1,106 @@
+.settingspage {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+}
+.heading {
+  width: 100%;
+  margin-top: 15px;
+  text-align: center;
+}
+.options,
+.privacy {
+  margin-top: 20px;
+  width: 100%;
+}
+.options > p,
+.privacy > p {
+  padding: 20px 10px;
+  margin: 0;
+  background-color: #e6e6e6;
+  text-align: start;
+  width: 100%;
+  border-bottom: 2px solid rgb(156, 156, 156);
+  transition: all 0.5s ease;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 300;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.options > p:hover {
+  background-color: #b0b1e4c0;
+  padding-left: 20px;
+}
+.options > p:first-of-type,
+.privacy > p:first-of-type {
+  border-top: 2px solid rgb(156, 156, 156);
+}
+.privacy > p > span {
+  width: max-content;
+  margin-right: 20px;
+  height: min-content;
+  margin-left: 10px;
+  background-color: rgb(211, 211, 211);
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+.settingsButton {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+.settingsCards {
+  max-height: 70% !important;
+}
+.noUsers {
+  height: 50px;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+.optionsbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(164, 167, 207);
+  height: max-content;
+  overflow: hidden;
+  border-radius: 10px;
+  z-index: 100;
+  color: rgb(49, 49, 49);
+}
+.optionsbar > div {
+  padding: 20px;
+  width: 95%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(83, 83, 83);
+  font-size: 17px;
+}
+.optionsbar > div:last-of-type {
+  border: none;
+}
+.optionsbar > div > input {
+  min-height: 18px;
+  min-width: 18px;
+}

@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
   about: {
     type: "string",
   },
+  privacy: { type: Object },
 });
 
 module.exports = mongoose.model("users", userSchema);

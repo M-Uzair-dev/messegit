@@ -11,7 +11,6 @@ export default function Protected() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-
   const [cookies, removeCookie] = useCookies(["jwt"]);
 
   useEffect(() => {
@@ -41,13 +40,14 @@ export default function Protected() {
           removeCookie("jwt");
           navigate("/login");
         }
-        console.log(data);
         let temp = {
           name: data.user.name,
           username: data.user.username,
           id: data.user._id,
           imageurl: data.user.imageurl,
           about: data.user.about,
+          img: data.user.privacy.img,
+          chat: data.user.privacy.chat,
         };
         dispatch(setUser(temp));
       } catch (error) {

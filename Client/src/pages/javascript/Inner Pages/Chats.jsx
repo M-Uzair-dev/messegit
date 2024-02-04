@@ -21,7 +21,9 @@ export default function Chats(props) {
   //------------------------------- States --------------------------------------------
 
   const [data, setData] = useState([]);
+  const [permanetData, setPermanetData] = useState([]);
   const [noChats, setNochats] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
   //------------------------------- UseEffect --------------------------------------------
@@ -63,6 +65,7 @@ export default function Chats(props) {
             });
 
             setData(updated);
+            setPermanetData(updated);
             setLoading(false);
           }
         }
@@ -75,6 +78,23 @@ export default function Chats(props) {
     fetchData();
   }, [user.id, refresh]);
 
+  let search = () => {
+    setLoading(true);
+
+    let tempData = permanetData.filter((e) => {
+      if (e.data.length !== 0) {
+        return e.data.some((item) =>
+          item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      } else {
+        return e.name.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+    });
+
+    setData(tempData);
+    setLoading(false);
+  };
+
   //------------------------------- JSX --------------------------------------------
 
   return (
@@ -83,10 +103,15 @@ export default function Chats(props) {
         <div className="InnerLeftTopBar">
           <img src={logo} alt="logo" />
           <div className="InnerLeftTopBarRight">
-            <SettingsRoundedIcon titleAccess="Settings" className="settings" />
+            <SettingsRoundedIcon
+              titleAccess="Settings"
+              className="settings"
+              onClick={() => {
+                props.settings();
+              }}
+            />
             <img
               src={user.imageurl || pfp}
-              alt="profile"
               onClick={() => {
                 props.showprofilepage();
               }}
@@ -104,8 +129,19 @@ export default function Chats(props) {
           <AddRoundedIcon titleAccess="Add new chat" />
         </div>
         <div className="searchChatsDiv">
-          <input placeholder="Search chats..." />
-          <SearchRoundedIcon titleAccess="Search" />
+          <input
+            placeholder="Search chats..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+            }}
+          />
+          <SearchRoundedIcon
+            titleAccess="Search"
+            onClick={() => {
+              search();
+            }}
+          />
         </div>
       </div>
       {loading ? (

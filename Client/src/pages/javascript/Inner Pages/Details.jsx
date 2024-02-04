@@ -211,13 +211,7 @@ export default function Details(props) {
             <ArrowBackIcon />
           </div>
           <div className="image detailsContainer">
-            <img
-              src={
-                imageurl ||
-                `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${id}`
-              }
-              alt="Profile image"
-            />
+            <img src={imageurl || pfp} alt="Profile image" />
             <h1>{name}</h1>
           </div>
           <div className="users">
@@ -298,13 +292,7 @@ export default function Details(props) {
             <ArrowBackIcon />
           </div>
           <div className="image detailsContainer">
-            <img
-              src={
-                imageurl ||
-                `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${id}`
-              }
-              alt="Profile image"
-            />
+            <img src={imageurl || pfp} alt="Profile image" />
             <h1>{name}</h1>
             <p>{username}</p>
             <p>{about}</p>

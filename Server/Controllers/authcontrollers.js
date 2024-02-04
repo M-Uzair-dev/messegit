@@ -57,6 +57,10 @@ module.exports.signup = async (req, res, next) => {
       ...req.body,
       password: hashedPassword,
       imageurl: `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${req.body.username}`,
+      privacy: {
+        img: "everyone",
+        chat: "everyone",
+      },
     });
 
     const token = createToken(user._id);
@@ -80,11 +84,38 @@ module.exports.checkEmail = async (req, res, next) => {
   }
 };
 
+module.exports.editPrivacy = async (req, res, next) => {
+  try {
+    const { privacy, id } = req.body;
+    const user = await userModel.findById(id);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+    user.privacy = privacy;
+    await user.save();
+
+    const chats = await chatModel.find({ members: id });
+
+    for (const chat of chats) {
+      const data = chat.data || [];
+      for (const memberData of data) {
+        if (memberData.id === id) {
+          memberData.img = privacy.img;
+        }
+      }
+      chat.markModified("data");
+      await chat.save();
+    }
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports.editUser = async (req, res, next) => {
   try {
     const userId = req.body.id;
     const updatedFields = req.body.updatedFields;
-    console.log(userId, updatedFields);
 
     const user = await userModel.findById(userId);
     if (!user) {
@@ -104,10 +135,8 @@ module.exports.editUser = async (req, res, next) => {
         }
       }
 
-      // Mark the 'data' array as modified before saving
       chat.markModified("data");
       await chat.save();
-      console.log("Chat saved successfully");
     }
 
     res.status(200).json({ success: true, user });
@@ -144,13 +173,23 @@ module.exports.findUsers = async (req, res) => {
       username: { $regex: username, $options: "i" },
     });
 
-    if (tempusers.length === 0) {
+    let permamentUsers = tempusers.map((user) => {
+      if (user.privacy.img === "none" || user.privacy.img === "chats") {
+        user.imageurl = "";
+      }
+      return user;
+    });
+    console.log(permamentUsers);
+
+    if (permamentUsers.length === 0) {
       res.status(200).json({ NoUser: true });
       return;
     }
 
-    const users = tempusers.filter((e) => e.username !== usersname);
-
+    const _users = permamentUsers.filter((e) => e.username !== usersname);
+    console.log(_users);
+    const users = _users.filter((e) => e.privacy.chat !== "none");
+    console.log(users);
     res.status(200).json({ users });
   } catch (err) {
     res.status(400).json({ success: false, errorMessage: err.message });

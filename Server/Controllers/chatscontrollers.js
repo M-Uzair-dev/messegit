@@ -14,14 +14,28 @@ module.exports.getchats = async (req, res) => {
       .find({ members: { $in: [userID] } })
       .sort({ updatedAt: -1 });
 
+    console.log(chats);
     if (chats && chats.length > 0) {
-      return res.status(200).json({ success: true, chats });
+      let updatedChats = chats.map((chat) => {
+        if (!chat.isGroup) {
+          if (chat.data[0].img === "none") {
+            delete chat.data[0].imageurl;
+          } else if (chat.data[1].img === "none") {
+            delete chat.data[1].imageurl;
+          }
+        }
+
+        return chat;
+      });
+
+      return res.status(200).json({ success: true, chats: updatedChats });
     } else {
       return res
         .status(200)
         .json({ success: false, message: "No chats found" });
     }
   } catch (e) {
+    console.log(e);
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });
@@ -65,11 +79,13 @@ module.exports.createchat = async (req, res, next) => {
         id: member1,
         name: user.name,
         imageurl: user.imageurl,
+        img: user.privacy.img,
       },
       {
         id: member2,
         name: user2.name,
         imageurl: user2.imageurl,
+        img: user.privacy.img,
       },
     ];
 
@@ -207,6 +223,13 @@ module.exports.getDetails = async (req, res) => {
       const userDetails = await Promise.all(
         users.map(async (memberID) => {
           const user = await usermodel.findById(memberID);
+          if (user.privacy.img === "none" || user.privacy.img === "chats") {
+            return {
+              _id: user._id,
+              name: user.name,
+              username: user.username,
+            };
+          }
           return {
             _id: user._id,
             name: user.name,
@@ -227,6 +250,9 @@ module.exports.getDetails = async (req, res) => {
     } else {
       let otherUser = chat.members.filter((memberid) => memberid !== userID)[0];
       let user = await usermodel.findById(otherUser);
+      if (user.privacy.img === "none") {
+        user.imageurl = null;
+      }
       res.status(200).json({ success: true, group: false, user });
     }
   } catch (e) {

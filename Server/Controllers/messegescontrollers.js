@@ -13,6 +13,7 @@ module.exports.getmesseges = async (req, res) => {
     const messages = await messegesModel.find({ chatID });
     const user = await usermodel.findById(userID);
     const chat = await chatsmodel.findById(chatID);
+
     if (!user || !chat) {
       return res.status(500).json({ success: false, message: "User invalid" });
     }
@@ -26,34 +27,58 @@ module.exports.getmesseges = async (req, res) => {
 
       await Promise.all(updatedMessages.map((message) => message.save()));
       let data;
-      if (chat.data.length === 0) {
+      if (chat.isGroup) {
         data = { name: chat.name };
+        return res.status(200).json({
+          success: true,
+          messages: updatedMessages,
+          group: chat.isGroup,
+          admin: chat.admin,
+          data,
+          imageurl: chat.imageurl,
+        });
       } else {
-        data = chat.data;
+        data = chat.data.map((e) => {
+          if (e.id !== userID && e.img === "none") {
+            e.imageurl = "";
+          }
+          return e;
+        });
+        return res.status(200).json({
+          success: true,
+          messages: updatedMessages,
+          group: chat.isGroup,
+          admin: chat.admin,
+          data,
+        });
       }
-      return res.status(200).json({
-        success: true,
-        messages: updatedMessages,
-        group: chat.isGroup,
-        admin: chat.admin,
-        data,
-        imageurl: chat.imageurl,
-      });
     } else {
       let data;
-      if (chat.data.length === 0) {
+      if (chat.isGroup) {
         data = { name: chat.name };
+        return res.status(200).json({
+          success: false,
+          message: "No messages found",
+          group: chat.isGroup,
+          admin: chat.admin,
+          data,
+          imageurl: chat.imageurl,
+        });
       } else {
-        data = chat.data;
+        data = chat.data.map((e) => {
+          if (e.id !== userID && e.img === "none") {
+            e.imageurl = "";
+          }
+          return e;
+        });
+        return res.status(200).json({
+          success: false,
+          message: "No messages found",
+          group: chat.isGroup,
+          admin: chat.admin,
+          data,
+        });
       }
-      return res.status(200).json({
-        success: false,
-        message: "No messages found",
-        group: chat.isGroup,
-        admin: chat.admin,
-        data,
-        imageurl: chat.imageurl,
-      });
     }
   } catch (e) {
     return res
@@ -112,7 +137,6 @@ module.exports.getNewMessagesCount = async (req, res) => {
     for (let i = 0; i < messages.length; i++) {
       if (!messages[i].seenBy.includes(userID)) {
         count++;
-        break;
       }
     }
     return res.status(200).json({

@@ -9,11 +9,13 @@ import Profilepage from "./Inner Pages/Profilepage";
 import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router-dom";
 import Details from "./Inner Pages/Details";
+import Settings from "./Inner Pages/Settings";
 
 export default function Mainpage() {
   const [showAddDiv, setshowAddDiv] = useState(false);
   const [showAddChat, setShowAddChat] = useState(false);
   const [showCreateGroupPage, setShowCreateGroupPage] = useState(false);
+  const [showSettingsPage, setShowSettingsPage] = useState(false);
 
   const [showdetails, setShowdetails] = useState(false);
   const { id } = useParams();
@@ -39,6 +41,9 @@ export default function Mainpage() {
           hidedetailspage={() => {
             setShowdetails(false);
           }}
+          settings={() => {
+            setShowSettingsPage(true);
+          }}
         />
 
         {showAddDiv ? (
@@ -57,7 +62,6 @@ export default function Mainpage() {
                 }}
               />
               <Button
-                // loading={loading === "button"}
                 text="Add a new chat"
                 theme="dark"
                 submit={() => {
@@ -66,7 +70,6 @@ export default function Mainpage() {
                 }}
               />
               <Button
-                // loading={loading === "button"}
                 text="Create a group chat"
                 theme="light"
                 submit={() => {
@@ -92,6 +95,16 @@ export default function Mainpage() {
             display={showCreateGroupPage}
             off={() => {
               setShowCreateGroupPage(false);
+            }}
+          />
+        ) : (
+          <></>
+        )}
+        {showSettingsPage ? (
+          <Settings
+            display={showSettingsPage}
+            off={() => {
+              setShowSettingsPage(false);
             }}
           />
         ) : (

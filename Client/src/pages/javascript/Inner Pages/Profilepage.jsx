@@ -23,7 +23,7 @@ export default function Profilepage(props) {
   const [pfploading, setPfploading] = useState(false);
 
   let uploadimg = async (event) => {
-    setPfploading(true);
+    setLoading(true);
     try {
       const selectedFile = event.target.files[0];
 
@@ -31,7 +31,7 @@ export default function Profilepage(props) {
         enqueueSnackbar("No files selected", {
           variant: "error",
         });
-        setPfploading(false);
+        setLoading(false);
         return;
       }
 
@@ -40,7 +40,7 @@ export default function Profilepage(props) {
         enqueueSnackbar("Invalid file type. Only png and jpg are allowed.", {
           variant: "error",
         });
-        setPfploading(false);
+        setLoading(false);
         return;
       }
 
@@ -49,7 +49,7 @@ export default function Profilepage(props) {
         enqueueSnackbar("Image cannot be larger than 5MB", {
           variant: "error",
         });
-        setPfploading(false);
+        setLoading(false);
         return;
       }
 
@@ -88,12 +88,13 @@ export default function Profilepage(props) {
                 username: result.user.username,
                 id: result.user._id,
                 about: result.user.about,
+                imageurl: result.user.imageurl,
               };
               dispatch(setUser(temp));
               enqueueSnackbar("Image uploaded Successfully.", {
                 variant: "success",
               });
-              setPfploading(false);
+              setLoading(false);
             }
           });
         });
@@ -102,7 +103,7 @@ export default function Profilepage(props) {
       enqueueSnackbar("An error occured :-(", {
         variant: "error",
       });
-      setPfploading(false);
+      setLoading(false);
     }
   };
 
@@ -134,10 +135,8 @@ export default function Profilepage(props) {
           name: result.user.name,
           username: result.user.username,
           id: result.user._id,
-          imageurl: result.user.imageurl,
           about: result.user.about,
         };
-        console.log(temp);
         dispatch(setUser(temp));
         enqueueSnackbar("Profile Updated Successfully.", {
           variant: "success",
@@ -168,7 +167,7 @@ export default function Profilepage(props) {
           className="profileimage"
         />
         <div className="hover">
-          {pfploading ? (
+          {loading ? (
             <TailSpin
               visible={true}
               height="30"

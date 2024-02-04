@@ -190,7 +190,8 @@ export default function CreateGroup(props) {
             ) : (
               <ChatCard
                 key={e._id}
-                pfp={members.includes(e._id) ? tick : e.imageurl || pfp}
+                pfp={e.imageurl || pfp}
+                selected={members.includes(e._id)}
                 name={e.username || "User's name"}
                 message={""}
                 nowrap={true}

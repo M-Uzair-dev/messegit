@@ -8,6 +8,8 @@ const initialState = {
     about: "",
     imageurl: "",
     user: "",
+    img: "",
+    chat: "",
   },
 };
 

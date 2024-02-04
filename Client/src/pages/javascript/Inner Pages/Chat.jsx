@@ -5,6 +5,7 @@ import SendIcon from "@mui/icons-material/Send";
 import logo from "../../../images/transparentlogo.png";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate, useParams } from "react-router-dom";
+import pfp from "../../../images/defaultpic.jpg";
 import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
@@ -46,7 +47,7 @@ export default function Chat(props) {
     (data) => {
       if (user.id && messeges) {
         const isCurrentUser = user.id === data.senderID;
-        if (!isCurrentUser && prevId !== data._id) {
+        if (!isCurrentUser && prevId !== data._id && id) {
           fetch("http://localhost:5000/messages/seen", {
             method: "POST",
             headers: {
@@ -351,10 +352,7 @@ export default function Chat(props) {
             </div>
             <div className="barleftdiv">
               <img
-                src={
-                  image ||
-                  `https://api.dicebear.com/7.x/bottts-neutral/svg?seed=${id}`
-                }
+                src={image || pfp}
                 alt="user image"
                 style={
                   isGroup
