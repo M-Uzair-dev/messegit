@@ -103,6 +103,7 @@ export default function CreateGroup(props) {
           body: JSON.stringify({
             username: inputval,
             usersname: user.username,
+            userId: user.id,
           }),
         });
 

@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
     type: "string",
   },
   privacy: { type: Object },
+  blocked: [{ type: String }],
 });
 
 module.exports = mongoose.model("users", userSchema);

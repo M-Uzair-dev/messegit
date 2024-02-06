@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "../../css/settings.css";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ChatCard from "../../../components/javascript/ChatCard";
@@ -8,18 +8,25 @@ import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import Confirm from "./confirm";
+import { useSnackbar } from "notistack";
 
 const Settings = (props) => {
   const user = useSelector((state) => state.user);
   const [cookies, removeCookie] = useCookies(["jwt"]);
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [privacypage, setPrivacypage] = useState(false);
   const [blockedpage, setBlockedpage] = useState(false);
   const [showoptions, setShowOptions] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showPasswordBox, setShowPasswordBox] = useState(false);
   const [noUsers, setNoUsers] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [selected, setSelected] = useState([]);
   const [confirmMessage, setConfirmMessage] = useState("");
+  const [passinput, setPassinput] = useState("");
   const [pfpChecked, setPfpChecked] = useState(user.img || "everyone");
   const [chatChecked, setChatChecked] = useState(user.chat || "everyone");
 
@@ -35,6 +42,101 @@ const Settings = (props) => {
         },
       }),
     });
+
+    enqueueSnackbar("Privacy updated.", { variant: "success" });
+  };
+
+  useEffect(() => {
+    let fetchBlocked = async () => {
+      try {
+        let blockedUsers = await fetch(
+          "http://localhost:5000/auth/getBlocked",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: user.id,
+            }),
+          }
+        );
+        let Users = await blockedUsers.json();
+        console.log(Users);
+        if (Users.NoBlocked) {
+          setNoUsers(true);
+        } else {
+          setUsers(Users.Blocked);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchBlocked();
+  }, [reload]);
+
+  let addUser = (id) => {
+    if (selected.includes(id)) {
+      let temp = selected.filter((userid) => {
+        return userid !== id;
+      });
+      setSelected(temp);
+    } else {
+      setSelected([...selected, id]);
+    }
+  };
+  let unBlock = async () => {
+    try {
+      let response = await fetch("http://localhost:5000/auth/unblock", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          selected,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      let data = await response.json();
+      if (!data.success) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      } else {
+        setReload(!reload);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  let confirmPass = async () => {
+    try {
+      let result = await fetch(
+        "http://localhost:5000/auth/getBlocked",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            password: passinput
+          }),
+        }
+      );
+      let res = await res.json();
+      if (res.success) {
+        window.alert(true)
+      } else {
+        window.alert(false)
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   };
 
   return (
@@ -85,27 +187,43 @@ const Settings = (props) => {
             ) : (
               <div className="cards settingsCards">
                 <>
-                  <ChatCard pfp={pfp} name="Uzair" username="@uzair-dev" />
-                  <ChatCard pfp={pfp} name="Uzair" username="@uzair-dev" />
-                  <ChatCard pfp={pfp} name="Uzair" username="@uzair-dev" />
-                  <ChatCard pfp={pfp} name="Uzair" username="@uzair-dev" />
-                  <ChatCard pfp={pfp} name="Uzair" username="@uzair-dev" />
-                  <ChatCard pfp={pfp} name="Uzair" username="@uzair-dev" />
-                  <ChatCard pfp={pfp} name="Uzair" username="@uzair-dev" />
-                  <ChatCard pfp={pfp} name="Uzair" username="@uzair-dev" />
-                  <ChatCard pfp={pfp} name="Uzair" username="@uzair-dev" />
+                  {users?.map((e) => {
+                    return (
+                      <ChatCard
+                        selected={selected.includes(e._id)}
+                        key={e._id}
+                        pfp={e.imageurl}
+                        name={e.name}
+                        username={e.username}
+                        onclick={() => {
+                          addUser(e._id);
+                        }}
+                      />
+                    );
+                  })}
                 </>
               </div>
             )}
 
             <div className="settingsButton">
-              {true ? (
-                <Button theme="light" submit={() => {}} text="Unblock" />
+              {selected.length === 0 ? (
+                <Button
+                  theme="light"
+                  submit={() => {
+                    enqueueSnackbar("No users selected.", { variant: "error" });
+                  }}
+                  text="Unblock"
+                />
               ) : (
                 <Button
                   theme="gradient"
-                  submit={() => {}}
-                  text="Create group"
+                  submit={() => {
+                    setConfirmMessage(
+                      "Ar you sure you want to unblock these Users ?"
+                    );
+                    setShowConfirm(true);
+                  }}
+                  text="Unblock"
                 />
               )}
             </div>
@@ -140,7 +258,13 @@ const Settings = (props) => {
             >
               Log Out
             </p>
-            <p>Delete Account</p>
+            <p
+              onClick={() => {
+                setShowPasswordBox(true);
+              }}
+            >
+              Delete Account
+            </p>
             <p>Contact Developer</p>
           </div>
         </>
@@ -225,6 +349,36 @@ const Settings = (props) => {
       ) : (
         <></>
       )}
+      {showPasswordBox ? (
+        <>
+          <div
+            className="blur"
+            onClick={() => {
+              setShowPasswordBox(false);
+            }}
+          ></div>
+          <div className="passdiv">
+            <h2>Please enter your password : </h2>
+            <input
+              type="password"
+              placeholder="pasword"
+              value={passinput}
+              onChange={(e) => {
+                setPassinput(e.target.value);
+              }}
+            />
+            <button
+              onClick={() => {
+                confirmPass();
+              }}
+            >
+              Confirm
+            </button>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
 
       <Confirm
         visible={showConfirm}
@@ -234,8 +388,16 @@ const Settings = (props) => {
         message={confirmMessage}
         yes={() => {
           setShowConfirm(false);
-          removeCookie("jwt");
-          navigate("/login");
+          if (
+            confirmMessage === `${user.name}, Are you sure you want to Log out`
+          ) {
+            removeCookie("jwt");
+            navigate("/login");
+          } else if (
+            confirmMessage === "Ar you sure you want to unblock these Users ?"
+          ) {
+            unBlock();
+          }
         }}
       />
     </div>

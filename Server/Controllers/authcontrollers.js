@@ -2,6 +2,7 @@ const userModel = require("../Models/usermodel");
 const chatModel = require("../Models/chatsmodel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const usermodel = require("../Models/usermodel");
 
 const maxAge = 3 * 24 * 60 * 60;
 
@@ -167,7 +168,9 @@ module.exports.deleteUser = async (req, res, next) => {
 module.exports.findUsers = async (req, res) => {
   try {
     const username = req.body.username;
-    const usersname = req.body.usersname;
+    const userId = req.body.userId;
+
+    let user = await userModel.findById(userId);
 
     const tempusers = await userModel.find({
       username: { $regex: username, $options: "i" },
@@ -179,19 +182,76 @@ module.exports.findUsers = async (req, res) => {
       }
       return user;
     });
-    console.log(permamentUsers);
 
     if (permamentUsers.length === 0) {
       res.status(200).json({ NoUser: true });
       return;
     }
 
-    const _users = permamentUsers.filter((e) => e.username !== usersname);
-    console.log(_users);
-    const users = _users.filter((e) => e.privacy.chat !== "none");
-    console.log(users);
+    const _users = permamentUsers.filter((e) => e._id.toString() !== userId);
+    const __users = _users.filter((e) => e.privacy.chat !== "none");
+    const ___users = __users.filter((e) => !e.blocked.includes(userId));
+    const users = ___users.filter((e) => !user.blocked.includes(e._id));
+
     res.status(200).json({ users });
   } catch (err) {
     res.status(400).json({ success: false, errorMessage: err.message });
+  }
+};
+
+module.exports.block = async (req, res) => {
+  let { chatId, userId } = req.body;
+  let user = await usermodel.findById(userId);
+  let chat = await chatModel.findById(chatId);
+  let userid = chat.members.find((e) => e !== userId);
+
+  if (user.blocked) {
+    user.blocked.push(userid);
+  } else {
+    user.blocked = [userid];
+  }
+
+  await user.save();
+};
+module.exports.GetBlocked = async (req, res) => {
+  try {
+    let userId = req.body.userId;
+    let user = await usermodel.findById(userId);
+    let blockedList = user.blocked;
+    if (blockedList.length === 0) {
+      res.status(200).json({ success: true, NoBlocked: true });
+    } else {
+      let blockedPromises = blockedList.map(async (blockedUserId) => {
+        let userData = await usermodel.findById(blockedUserId);
+        return userData;
+      });
+
+      let Blocked = await Promise.all(blockedPromises);
+      res.status(200).json({ success: true, Blocked });
+    }
+  } catch (e) {
+    res.status(400).json({ success: false, error: e.message });
+  }
+};
+
+module.exports.unBlock = async (req, res) => {
+  try {
+    const { userId, selected } = req.body;
+    let user = await usermodel.findById(userId);
+    user.blocked = user.blocked.filter((e) => !selected.includes(e));
+    await user.save();
+    res.status(200).json({ success: true });
+  } catch (e) {
+    res.status(400).json({ success: false, error: e.message });
+  }
+};
+module.exports.comparePass = async (req, res) => {
+  const { userId, password } = req.body;
+  let user = await usermodel.findById(userId);
+  const passwordMatch = await bcrypt.compare(password, user.password);
+  if (passwordMatch) {
+    res.status(200).json({ success: true });
+  } else {
+    res.status(200).json({ success: false });
   }
 };

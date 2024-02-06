@@ -33,6 +33,7 @@ export default function SearchUser(props) {
         body: JSON.stringify({
           member1: id,
           member2: user.id,
+          userId: user.id,
         }),
       });
 
@@ -78,6 +79,7 @@ export default function SearchUser(props) {
           body: JSON.stringify({
             username: inputval,
             usersname: user.username,
+            userId: user.id,
           }),
         });
 

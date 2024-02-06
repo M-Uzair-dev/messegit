@@ -40,6 +40,7 @@ export default function Chat(props) {
   const [socket, setSocket] = useState(null);
   const socketInitialized = useRef(false);
   const [prevId, setPrevId] = useState("");
+  const [userId, setUserId] = useState("");
 
   // --------------------------------  UseEffects -----------------------------------------------
 
@@ -302,11 +303,26 @@ export default function Chat(props) {
       enqueueSnackbar("An error occured.", { variant: "error" });
     }
   };
+
+  let blockUser = async () => {
+    const res = await fetch("http://localhost:5000/auth/block", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        chatId: id,
+        userId: user.id,
+      }),
+    });
+  };
+
   let cont = () => {
     if (fnc === "DeleteChat") {
       deletechat("Chat deleted.");
       setfnc("");
     } else if (fnc === "BlockChat") {
+      blockUser();
       deletechat("User blocked successfully.");
       setfnc("");
     } else if (fnc === "Report") {

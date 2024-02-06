@@ -55,13 +55,13 @@
   border-radius: 10px;
 }
 .settingsButton {
-  width: 100%;
+  width: 90%;
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 5%;
 }
 .settingsCards {
-  max-height: 70% !important;
+  max-height: 70vh !important;
 }
 .noUsers {
   height: 50px;
@@ -103,4 +103,41 @@
 .optionsbar > div > input {
   min-height: 18px;
   min-width: 18px;
+}
+.passdiv {
+  z-index: 95;
+  background-color: rgb(172, 178, 212);
+  width: 80%;
+  height: max-content;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 5%;
+  border-radius: 10px;
+}
+.passdiv > h2 {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  font-weight: 500;
+}
+.passdiv > input {
+  width: 80%;
+  margin: 10px 5%;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  padding: 10px;
+}
+.passdiv > button {
+  margin: 5px 5%;
+  font-size: 17px;
+  background-color: rgb(212, 212, 212);
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
 }
