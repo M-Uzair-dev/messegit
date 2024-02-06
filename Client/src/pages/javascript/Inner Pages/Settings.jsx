@@ -29,6 +29,7 @@ const Settings = (props) => {
   const [passinput, setPassinput] = useState("");
   const [pfpChecked, setPfpChecked] = useState(user.img || "everyone");
   const [chatChecked, setChatChecked] = useState(user.chat || "everyone");
+  const [count, setCount] = useState(0);
 
   const updatePrivacy = () => {
     fetch("http://localhost:5000/auth/privacy", {
@@ -62,14 +63,13 @@ const Settings = (props) => {
           }
         );
         let Users = await blockedUsers.json();
-        console.log(Users);
         if (Users.NoBlocked) {
           setNoUsers(true);
         } else {
           setUsers(Users.Blocked);
         }
       } catch (e) {
-        console.log(e);
+        enqueueSnackbar("Server error.", { variant: "error" });
       }
     };
     fetchBlocked();
@@ -108,35 +108,64 @@ const Settings = (props) => {
         setReload(!reload);
       }
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar("Server error.", { variant: "error" });
     }
   };
 
   let confirmPass = async () => {
     try {
-      let result = await fetch(
-        "http://localhost:5000/auth/getBlocked",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userId: user.id,
-            password: passinput
-          }),
-        }
-      );
-      let res = await res.json();
+      let result = await fetch("http://localhost:5000/auth/compare", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          password: passinput,
+        }),
+      });
+      let res = await result.json();
       if (res.success) {
-        window.alert(true)
+        setConfirmMessage(
+          "Are you sure you want to Delete you account permanently ?"
+        );
+        setShowConfirm(true);
       } else {
-        window.alert(false)
+        if (count >= 5) {
+          removeCookie("jwt");
+          navigate("/login");
+          enqueueSnackbar("Please login again.", { variant: "error" });
+        } else {
+          setCount(count + 1);
+          enqueueSnackbar("Wrong Password", { variant: "error" });
+        }
       }
     } catch (e) {
-      console.log(e);
+      enqueueSnackbar("Server error.", { variant: "error" });
     }
   };
+  let DeleteAccount = async () => {
+    try {
+      let result = await fetch("http://localhost:5000/auth/delete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: user.id,
+        }),
+      });
+      let res = await result.json();
+      if (res.success) {
+        enqueueSnackbar("Account Deleted.", { variant: "success" });
+        removeCookie("jwt");
+        navigate("/login");
+      } else {
+        enqueueSnackbar("Server error.", { variant: "error" });
+      }
+    } catch (e) {
+      enqueueSnackbar("Server error.", { variant: "error" });
+    }
   };
 
   return (
@@ -219,7 +248,7 @@ const Settings = (props) => {
                   theme="gradient"
                   submit={() => {
                     setConfirmMessage(
-                      "Ar you sure you want to unblock these Users ?"
+                      "Are you sure you want to unblock these Users ?"
                     );
                     setShowConfirm(true);
                   }}
@@ -394,9 +423,14 @@ const Settings = (props) => {
             removeCookie("jwt");
             navigate("/login");
           } else if (
-            confirmMessage === "Ar you sure you want to unblock these Users ?"
+            confirmMessage === "Are you sure you want to unblock these Users ?"
           ) {
             unBlock();
+          } else if (
+            confirmMessage ===
+            "Are you sure you want to Delete you account permanently ?"
+          ) {
+            DeleteAccount();
           }
         }}
       />

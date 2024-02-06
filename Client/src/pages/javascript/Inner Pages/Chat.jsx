@@ -6,12 +6,14 @@ import logo from "../../../images/transparentlogo.png";
 import CloseIcon from "@mui/icons-material/Close";
 import { useNavigate, useParams } from "react-router-dom";
 import pfp from "../../../images/defaultpic.jpg";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import Confirm from "./confirm";
 import AddUsers from "./AddUsers";
 import io from "socket.io-client";
+import EmojiPicker from "emoji-picker-react";
 
 export default function Chat(props) {
   //------------------------------- Variables and Hooks --------------------------------------------
@@ -34,6 +36,7 @@ export default function Chat(props) {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
   const [showaddUsers, setShowAddUsers] = useState(false);
   const [confirmMessage, setConfirmMessage] = useState("");
   const [fnc, setfnc] = useState("");
@@ -115,7 +118,6 @@ export default function Chat(props) {
         }
 
         const result = await res.json();
-        console.log(result);
 
         if (result.success === false) {
           if (result.message === "No messages found") {
@@ -233,7 +235,6 @@ export default function Chat(props) {
         enqueueSnackbar(message, { variant: "success" });
       }
     } catch (e) {
-      console.log(e);
       enqueueSnackbar("An error occured.", { variant: "error" });
     }
   };
@@ -251,7 +252,6 @@ export default function Chat(props) {
   }
   let addMessege = async () => {
     if (messege === "") {
-      enqueueSnackbar("Empty messege.", { variant: "error" });
       return;
     }
     try {
@@ -555,11 +555,27 @@ export default function Chat(props) {
           </div>
         )}
       </div>
+      <div className="emojis">
+        <EmojiPicker
+          open={showEmoji}
+          onEmojiClick={(emoji) => {
+            setMessege(messege + " " + emoji.emoji);
+          }}
+        />
+      </div>
       {id === undefined || loading ? (
         <></>
       ) : (
         <div className="inputTabParent">
           <div className="inputTab">
+            <div
+              className="emoji"
+              onClick={() => {
+                setShowEmoji(!showEmoji);
+              }}
+            >
+              <EmojiEmotionsIcon />
+            </div>
             <input
               onChange={(e) => {
                 handleChange(e);

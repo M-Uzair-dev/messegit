@@ -41,8 +41,6 @@ export default function CreateGroup(props) {
 
     setMembers(newMembers);
     setUsers(newUsers);
-
-    console.log(users);
   };
 
   const createGroup = async () => {

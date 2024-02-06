@@ -20,9 +20,7 @@ export default function Load() {
         if (id) navigate(`/chats/${id}`);
         else navigate("/chats");
       }
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   }, []);
   return (
     <>

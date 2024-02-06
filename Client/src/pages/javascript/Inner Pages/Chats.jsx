@@ -48,6 +48,7 @@ export default function Chats(props) {
         }
 
         const result = await res.json();
+        console.log(result);
 
         if (result.message === "No chats found" || result.chats.length === 0) {
           setLoading(false);

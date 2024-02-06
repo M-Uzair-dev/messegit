@@ -142,14 +142,28 @@ module.exports.editUser = async (req, res, next) => {
 
     res.status(200).json({ success: true, user });
   } catch (err) {
-    console.log(err);
     res.status(400).json({ success: false, errorMessage: err.message });
   }
 };
 
 module.exports.deleteUser = async (req, res, next) => {
   try {
-    const userId = req.params.id;
+    const userId = req.body.id;
+
+    await userModel.updateMany(
+      { blocked: userId },
+      { $pull: { blocked: userId } }
+    );
+
+    await chatModel.deleteMany({
+      isGroup: false,
+      members: userId,
+    });
+
+    await chatModel.updateMany(
+      { isGroup: true, members: userId },
+      { $pull: { members: userId } }
+    );
 
     const result = await userModel.deleteOne({ _id: userId });
 
@@ -164,7 +178,6 @@ module.exports.deleteUser = async (req, res, next) => {
     res.status(400).json({ success: false, errorMessage: err.message });
   }
 };
-
 module.exports.findUsers = async (req, res) => {
   try {
     const username = req.body.username;

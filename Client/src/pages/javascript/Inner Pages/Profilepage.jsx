@@ -63,7 +63,6 @@ export default function Profilepage(props) {
       fileReader.onload = () => {
         fileRef.putString(fileReader.result, "data_url").then((snapshot) => {
           snapshot.ref.getDownloadURL().then(async (url) => {
-            console.log("File uploaded successfully:", url);
             let res = await fetch("http://localhost:5000/auth/update", {
               method: "POST",
               headers: {

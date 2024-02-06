@@ -36,8 +36,6 @@ export default function AddUsers(props) {
 
     setMembers(newMembers);
     setUsers(newUsers);
-
-    console.log(users);
   };
 
   useEffect(() => {
@@ -79,7 +77,6 @@ export default function AddUsers(props) {
         setUsersLoaded(true);
       } catch (e) {
         setLoading(false);
-        console.log(e);
         navigate("/chats");
       }
     };
@@ -140,8 +137,6 @@ export default function AddUsers(props) {
   }, [inputval]);
 
   let submit = async () => {
-    console.log(members);
-    console.log(users);
     try {
       const newMembers = [...members, user.id];
       if (members.length === 0) {
@@ -168,7 +163,6 @@ export default function AddUsers(props) {
       enqueueSnackbar("Users Updated Successfully", { variant: "success" });
       props.hide();
     } catch (e) {
-      console.log(e);
       enqueueSnackbar("HTTP Error", { variant: "error" });
     }
   };
@@ -191,13 +185,7 @@ export default function AddUsers(props) {
           {" "}
           <CloseIcon />
         </div>
-        <h1
-          onClick={() => {
-            console.log(data + "||||||||" + users + "|||||||||" + members);
-          }}
-        >
-          Manage Users
-        </h1>
+        <h1>Manage Users</h1>
         <div className="inputDivadd">
           <Input
             label="Search"

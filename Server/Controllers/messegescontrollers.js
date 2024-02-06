@@ -144,7 +144,6 @@ module.exports.getNewMessagesCount = async (req, res) => {
       latestMessage: latestMessage,
     });
   } catch (e) {
-    console.log(e);
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });

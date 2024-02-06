@@ -42,7 +42,6 @@ export default function SearchUser(props) {
       }
 
       const data = await res.json();
-      console.log(data);
 
       if (data.data && data.success === true) {
         const redirectUrl = String(data.data.chatId);

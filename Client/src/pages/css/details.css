@@ -78,12 +78,12 @@
 .scroll {
   overflow-y: scroll;
 }
-@media (max-width: 842px) {
+@media (max-width: 1000px) {
   .users {
     width: 80%;
   }
 }
-@media (max-width: 310px) {
+@media (max-width: 710px) {
   .users {
     width: 95%;
   }

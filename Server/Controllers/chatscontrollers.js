@@ -14,7 +14,6 @@ module.exports.getchats = async (req, res) => {
       .find({ members: { $in: [userID] } })
       .sort({ updatedAt: -1 });
 
-    console.log(chats);
     if (chats && chats.length > 0) {
       let updatedChats = chats.map((chat) => {
         if (!chat.isGroup) {
@@ -35,7 +34,6 @@ module.exports.getchats = async (req, res) => {
         .json({ success: false, message: "No chats found" });
     }
   } catch (e) {
-    console.log(e);
     return res
       .status(500)
       .json({ success: false, message: "Internal Server Error" });

@@ -86,7 +86,6 @@ export default function Details(props) {
         setLoading(false);
       } catch (e) {
         setLoading(false);
-        console.log(e);
         navigate("/chats");
         enqueueSnackbar("An error occured.", { variant: "error" });
       }
@@ -119,7 +118,6 @@ export default function Details(props) {
         props.hide();
       }
     } catch (e) {
-      console.log(e);
       enqueueSnackbar("An error occured.", { variant: "error" });
     }
   };
@@ -149,7 +147,6 @@ export default function Details(props) {
         props.hide();
       }
     } catch (e) {
-      console.log(e);
       enqueueSnackbar("An error occured.", { variant: "error" });
     }
   };
