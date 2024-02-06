@@ -24,12 +24,8 @@ app.use(cookieParser());
 
 mongoose
   .connect(process.env.DATABASE_URL)
-  .then(() => {
-    console.log("Database connected!");
-  })
-  .catch((err) => {
-    console.log("Database connection error: " + err);
-  });
+  .then(() => {})
+  .catch((err) => {});
 
 const server = http.createServer(app);
 const io = socketIo(server, {
@@ -57,6 +53,4 @@ app.use("/chats", chatsRoute);
 app.use("/auth", authRoute);
 app.use("/messages", messagesroute);
 
-server.listen(5000, () => {
-  console.log("Server is running on port 5000");
-});
+server.listen(5000, () => {});
