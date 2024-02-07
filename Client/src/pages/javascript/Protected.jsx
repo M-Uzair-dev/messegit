@@ -10,6 +10,7 @@ import { setUser } from "../../Redux/Features/userSlice";
 export default function Protected() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  let id = localStorage.getItem("id");
   const { enqueueSnackbar } = useSnackbar();
   const [cookies, removeCookie] = useCookies(["jwt"]);
 
@@ -28,8 +29,9 @@ export default function Protected() {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({}),
-            credentials: "include",
+            body: JSON.stringify({
+              id,
+            }),
           }
         );
 
@@ -38,8 +40,6 @@ export default function Protected() {
         }
 
         const data = await response.json();
-        console.log(data);
-
         if (!data.status) {
           removeCookie("jwt");
           navigate("/login");

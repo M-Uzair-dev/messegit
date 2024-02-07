@@ -88,6 +88,7 @@ const Signup = () => {
             });
           }
         } else {
+          localStorage.setItem("id", data.id);
           navigate("/chats");
         }
       } catch (err) {

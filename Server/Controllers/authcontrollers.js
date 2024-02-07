@@ -1,18 +1,7 @@
 const userModel = require("../Models/usermodel");
 const chatModel = require("../Models/chatsmodel");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const usermodel = require("../Models/usermodel");
-
-const maxAge = 3 * 24 * 60 * 60;
-
-const createToken = (id) => {
-  try {
-    return jwt.sign({ id }, process.env.SECRET_KEY, { expiresIn: maxAge });
-  } catch (err) {
-    throw err;
-  }
-};
 
 module.exports.login = async (req, res, next) => {
   try {
@@ -28,10 +17,7 @@ module.exports.login = async (req, res, next) => {
     if (!passwordMatch) {
       throw new Error("Invalid email or password");
     }
-
-    const token = createToken(user._id);
-    res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
-    res.status(200).json({ success: true });
+    res.status(200).json({ success: true, id: user._id });
   } catch (err) {
     res
       .status(200)
@@ -63,12 +49,7 @@ module.exports.signup = async (req, res, next) => {
         chat: "everyone",
       },
     });
-
-    const token = createToken(user._id);
-
-    res.cookie("jwt", token, { httpOnly: false, maxAge: maxAge * 1000 });
-
-    res.status(201).json({ success: true });
+    res.status(201).json({ success: true, id: user._id });
   } catch (err) {
     res.status(400).json({ success: false, errorMessage: err.message });
   }

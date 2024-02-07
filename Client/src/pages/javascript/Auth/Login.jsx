@@ -10,20 +10,16 @@ import { useCookies } from "react-cookie";
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const userid = localStorage.getItem("id");
 
-  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [data, setData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState("");
 
   useEffect(() => {
-    if (cookies.jwt) {
-      if (cookies.jwt === "undefined") {
-        removeCookie("jwt");
-      } else {
-        navigate("/");
-      }
+    if (userid) {
+      navigate("/");
     }
-  }, [cookies]);
+  }, []);
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.id]: e.target.value });
@@ -51,6 +47,7 @@ const Login = () => {
         const res = await response.json();
 
         if (res.success) {
+          localStorage.setItem("id", res.id);
           navigate("/chats");
         } else {
           enqueueSnackbar("Invalid Credentials", { variant: "error" });
