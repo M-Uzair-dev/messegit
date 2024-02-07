@@ -11,8 +11,6 @@ export default function Protected() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   let id = localStorage.getItem("id");
-  const { enqueueSnackbar } = useSnackbar();
-  const [cookies, removeCookie] = useCookies(["jwt"]);
 
   useEffect(() => {
     const validate = async () => {
@@ -41,8 +39,8 @@ export default function Protected() {
 
         const data = await response.json();
         if (!data.status) {
-          removeCookie("jwt");
           navigate("/login");
+          localStorage.removeItem("id");
         }
         let temp = {
           name: data.user.name,
