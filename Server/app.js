@@ -12,20 +12,15 @@ require("dotenv").config();
 
 const app = express();
 
-// CORS middleware configuration
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://messegit.vercel.app");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    return res.status(200).json({});
-  }
-  next();
-});
+// CORS middleware configuration for regular HTTP requests
+app.use(
+  cors({
+    origin: "https://messegit.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 app.use(bodyparser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -37,12 +32,17 @@ mongoose
   .catch((err) => {});
 
 const server = http.createServer(app);
-const io = socketIo(server, {
-  cors: {
-    origin: "https://messegit.vercel.app",
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
+const io = socketIo(server);
+
+// Configure CORS for socket.io connections
+io.use((socket, next) => {
+  // Allow connections from https://messegit.vercel.app
+  const origin = socket.request.headers.origin;
+  if (origin === "https://messegit.vercel.app") {
+    return next(null, true);
+  }
+  // Reject connections from other origins
+  return next(new Error("Unauthorized origin"));
 });
 
 io.on("connection", (socket) => {
@@ -62,4 +62,6 @@ app.use("/chats", chatsRoute);
 app.use("/auth", authRoute);
 app.use("/messages", messagesroute);
 
-server.listen(5000, () => {});
+server.listen(5000, () => {
+  console.log("Server listening on port 5000");
+});

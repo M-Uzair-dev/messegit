@@ -43,11 +43,9 @@ const Login = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              // Include credentials in the request headers
               credentials: "include",
             },
             body: JSON.stringify(data),
-            // No need to include credentials separately, it should be in the headers
           }
         );
         const res = await response.json();
