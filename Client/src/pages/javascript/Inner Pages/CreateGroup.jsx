@@ -45,7 +45,7 @@ export default function CreateGroup(props) {
 
   const createGroup = async () => {
     try {
-      const res = await fetch("http://localhost:5000/chats/newgroup", {
+      const res = await fetch("https://messegitapi.vercel.app/chats/newgroup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +93,7 @@ export default function CreateGroup(props) {
     setNoresults(false);
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:5000/auth/find", {
+        const res = await fetch("https://messegitapi.vercel.app/auth/find", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

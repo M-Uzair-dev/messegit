@@ -25,7 +25,7 @@ export default function SearchUser(props) {
 
   const createChat = async (id) => {
     try {
-      const res = await fetch("http://localhost:5000/chats/new", {
+      const res = await fetch("https://messegitapi.vercel.app/chats/new", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export default function SearchUser(props) {
     setNoresults(false);
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:5000/auth/find", {
+        const res = await fetch("https://messegitapi.vercel.app/auth/find", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

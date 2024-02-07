@@ -6,7 +6,7 @@ import "./main.css";
 import Signup from "./pages/javascript/Auth/Signup";
 import Login from "./pages/javascript/Auth/Login";
 import Mainpage from "./pages/javascript/Mainpage";
-import Protected from "./pages/javascript/protected";
+import Protected from "./pages/javascript/Protected";
 import Load from "./pages/javascript/Load";
 import firebase from "firebase/compat/app";
 

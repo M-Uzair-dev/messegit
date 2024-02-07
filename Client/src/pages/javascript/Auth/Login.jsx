@@ -37,14 +37,17 @@ const Login = () => {
       } else if (data.password === "") {
         enqueueSnackbar("Password is required", { variant: "error" });
       } else {
-        const response = await fetch("http://localhost:5000/auth/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-          credentials: "include",
-        });
+        const response = await fetch(
+          "https://messegitapi.vercel.app/auth/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+            credentials: "include",
+          }
+        );
 
         if (response.ok) {
           navigate("/chats");

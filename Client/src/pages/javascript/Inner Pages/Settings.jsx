@@ -32,7 +32,7 @@ const Settings = (props) => {
   const [count, setCount] = useState(0);
 
   const updatePrivacy = () => {
-    fetch("http://localhost:5000/auth/privacy", {
+    fetch("https://messegitapi.vercel.app/auth/privacy", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -51,7 +51,7 @@ const Settings = (props) => {
     let fetchBlocked = async () => {
       try {
         let blockedUsers = await fetch(
-          "http://localhost:5000/auth/getBlocked",
+          "https://messegitapi.vercel.app/auth/getBlocked",
           {
             method: "POST",
             headers: {
@@ -87,16 +87,19 @@ const Settings = (props) => {
   };
   let unBlock = async () => {
     try {
-      let response = await fetch("http://localhost:5000/auth/unblock", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: user.id,
-          selected,
-        }),
-      });
+      let response = await fetch(
+        "https://messegitapi.vercel.app/auth/unblock",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            selected,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -114,7 +117,7 @@ const Settings = (props) => {
 
   let confirmPass = async () => {
     try {
-      let result = await fetch("http://localhost:5000/auth/compare", {
+      let result = await fetch("https://messegitapi.vercel.app/auth/compare", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -146,7 +149,7 @@ const Settings = (props) => {
   };
   let DeleteAccount = async () => {
     try {
-      let result = await fetch("http://localhost:5000/auth/delete", {
+      let result = await fetch("https://messegitapi.vercel.app/auth/delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

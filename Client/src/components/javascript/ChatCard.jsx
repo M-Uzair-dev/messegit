@@ -25,7 +25,7 @@ const ChatCard = memo(
     const [dateState, setDateState] = useState(date);
     const user = useSelector((state) => state.user);
     const isMounted = useRef(false);
-    const socket = useRef(io("http://localhost:5000"));
+    const socket = useRef(io("https://messegitapi.vercel.app"));
 
     const receiveMessageHandler = useCallback(
       (data) => {
@@ -59,16 +59,19 @@ const ChatCard = memo(
         try {
           if (!user.id || !ChatId) return;
 
-          const res = await fetch("http://localhost:5000/messages/getcount", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              chatId: ChatId,
-              userId: user.id,
-            }),
-          });
+          const res = await fetch(
+            "https://messegitapi.vercel.app/messages/getcount",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                chatId: ChatId,
+                userId: user.id,
+              }),
+            }
+          );
 
           if (!res.ok) {
             throw new Error(`HTTP error! Status: ${res.status}`);

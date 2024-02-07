@@ -21,24 +21,28 @@ export default function Protected() {
           return;
         }
 
-        const response = await fetch("http://localhost:5000/auth/validate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({}),
-          credentials: "include",
-        });
+        const response = await fetch(
+          "https://messegitapi.vercel.app/auth/validate",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({}),
+            credentials: "include",
+          }
+        );
 
         if (!response.ok) {
           throw new Error();
         }
 
         const data = await response.json();
+        console.log(data);
 
         if (!data.status) {
-          removeCookie("jwt");
-          navigate("/login");
+          // removeCookie("jwt");
+          // navigate("/login");
         }
         let temp = {
           name: data.user.name,
@@ -51,8 +55,9 @@ export default function Protected() {
         };
         dispatch(setUser(temp));
       } catch (error) {
-        removeCookie("jwt");
-        navigate("/login");
+        console.log(error);
+        // removeCookie("jwt");
+        // navigate("/login");
       }
     };
 

@@ -44,16 +44,19 @@ export default function AddUsers(props) {
       try {
         if (!user.id || !id) return;
 
-        const res = await fetch("http://localhost:5000/chats/details", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chatID: id,
-            userID: user.id,
-          }),
-        });
+        const res = await fetch(
+          "https://messegitapi.vercel.app/chats/details",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              chatID: id,
+              userID: user.id,
+            }),
+          }
+        );
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
@@ -102,7 +105,7 @@ export default function AddUsers(props) {
     setNoresults(false);
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:5000/auth/find", {
+        const res = await fetch("https://messegitapi.vercel.app/auth/find", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -143,7 +146,7 @@ export default function AddUsers(props) {
         enqueueSnackbar("Please select any users", { variant: "error" });
         return;
       }
-      let res = await fetch("http://localhost:5000/chats/add", {
+      let res = await fetch("https://messegitapi.vercel.app/chats/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

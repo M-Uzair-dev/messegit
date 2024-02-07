@@ -63,12 +63,15 @@ const Signup = () => {
           finaldata.username.replace(" ", "");
         }
 
-        const response = await fetch("http://localhost:5000/auth/signup", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(finaldata),
-          credentials: "include",
-        });
+        const response = await fetch(
+          "https://messegitapi.vercel.app/auth/signup",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(finaldata),
+            credentials: "include",
+          }
+        );
 
         const data = await response.json();
 
@@ -106,13 +109,16 @@ const Signup = () => {
         enqueueSnackbar("Parword is too short.", { variant: "error" });
       } else {
         console.log(data.email);
-        const response = await fetch("http://localhost:5000/auth/check", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+        const response = await fetch(
+          "https://messegitapi.vercel.app/auth/check",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
 
         if (response.ok) {
           const responseData = await response.json();

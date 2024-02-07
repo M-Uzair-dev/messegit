@@ -52,7 +52,7 @@ export default function Chat(props) {
       if (user.id && messeges) {
         const isCurrentUser = user.id === data.senderID;
         if (!isCurrentUser && prevId !== data._id && id) {
-          fetch("http://localhost:5000/messages/seen", {
+          fetch("https://messegitapi.vercel.app/messages/seen", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export default function Chat(props) {
   );
 
   useEffect(() => {
-    const socketInstance = io("http://localhost:5000");
+    const socketInstance = io("https://messegitapi.vercel.app");
     setSocket(socketInstance);
 
     return () => {
@@ -103,7 +103,7 @@ export default function Chat(props) {
       try {
         if (!user.id || !id) return;
 
-        const res = await fetch("http://localhost:5000/messages/get", {
+        const res = await fetch("https://messegitapi.vercel.app/messages/get", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -185,7 +185,7 @@ export default function Chat(props) {
 
   let deletechat = async (m) => {
     try {
-      const res = await fetch("http://localhost:5000/chats/delete", {
+      const res = await fetch("https://messegitapi.vercel.app/chats/delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -213,7 +213,7 @@ export default function Chat(props) {
 
   let exitgroup = async (message) => {
     try {
-      const res = await fetch("http://localhost:5000/chats/exit", {
+      const res = await fetch("https://messegitapi.vercel.app/chats/exit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -257,7 +257,7 @@ export default function Chat(props) {
     try {
       if (!user.id || !id) throw new Error(`HTTP error! Status: ${res.status}`);
 
-      const res = await fetch("http://localhost:5000/messages/new", {
+      const res = await fetch("https://messegitapi.vercel.app/messages/new", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -305,7 +305,7 @@ export default function Chat(props) {
   };
 
   let blockUser = async () => {
-    const res = await fetch("http://localhost:5000/auth/block", {
+    const res = await fetch("https://messegitapi.vercel.app/auth/block", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

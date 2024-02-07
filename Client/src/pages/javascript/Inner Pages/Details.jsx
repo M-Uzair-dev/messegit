@@ -40,16 +40,19 @@ export default function Details(props) {
       try {
         if (!user.id || !id) return;
 
-        const res = await fetch("http://localhost:5000/chats/details", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chatID: id,
-            userID: user.id,
-          }),
-        });
+        const res = await fetch(
+          "https://messegitapi.vercel.app/chats/details",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              chatID: id,
+              userID: user.id,
+            }),
+          }
+        );
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
@@ -96,7 +99,7 @@ export default function Details(props) {
 
   let deletechat = async (message) => {
     try {
-      const res = await fetch("http://localhost:5000/chats/delete", {
+      const res = await fetch("https://messegitapi.vercel.app/chats/delete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -124,7 +127,7 @@ export default function Details(props) {
 
   let exitgroup = async (message) => {
     try {
-      const res = await fetch("http://localhost:5000/chats/exit", {
+      const res = await fetch("https://messegitapi.vercel.app/chats/exit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
