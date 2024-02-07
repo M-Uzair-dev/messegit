@@ -14,7 +14,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: "https://messegit.vercel.app",
   })
 );
 
@@ -30,7 +30,7 @@ mongoose
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://messegit.vercel.app",
     methods: ["GET", "POST"],
     credentials: true,
   },
