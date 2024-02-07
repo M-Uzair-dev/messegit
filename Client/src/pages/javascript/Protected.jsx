@@ -1,8 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../Redux/Features/userSlice";
@@ -15,7 +13,7 @@ export default function Protected() {
   useEffect(() => {
     const validate = async () => {
       try {
-        if (!cookies.jwt) {
+        if (!id) {
           navigate("/login");
           return;
         }
@@ -60,7 +58,7 @@ export default function Protected() {
     };
 
     validate();
-  }, [cookies]);
+  }, []);
 
   return (
     <div>

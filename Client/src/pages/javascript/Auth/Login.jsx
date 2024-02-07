@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import logo from "../../../images/logo.PNG";
 import "../../css/auth.css";
 import { useSnackbar } from "notistack";
-import { useCookies } from "react-cookie";
 
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar();

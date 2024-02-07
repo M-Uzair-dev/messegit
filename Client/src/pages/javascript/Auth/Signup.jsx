@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 import logo from "../../../images/logo.PNG";
 import { useSnackbar } from "notistack";
 import "../../css/auth.css";
-import { useCookies } from "react-cookie";
 
 const Signup = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   const [validated, setValidated] = useState(false);
+  const id = localStorage.getItem("id");
+
   const [data, setData] = useState({ email: "", password: "" });
   const [finaldata, setFinaldata] = useState({
     email: "",
@@ -28,14 +28,10 @@ const Signup = () => {
   }
 
   useEffect(() => {
-    if (cookies.jwt) {
-      if (cookies.jwt === "undefined") {
-        removeCookie("jwt");
-      } else {
-        navigate("/");
-      }
+    if (id) {
+      navigate("/");
     }
-  }, [cookies]);
+  }, []);
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.id]: e.target.value });
