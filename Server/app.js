@@ -11,12 +11,16 @@ const socketIo = require("socket.io");
 require("dotenv").config();
 
 const app = express();
-app.use(
-  cors({
-    credentials: true,
-    origin: "https://messegit.vercel.app",
-  })
-);
+
+// CORS middleware configuration
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://messegit.vercel.app");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 app.use(bodyparser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -48,6 +52,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {});
 });
 
+// Routes
 app.use("/chats", chatsRoute);
 app.use("/auth", authRoute);
 app.use("/messages", messagesroute);

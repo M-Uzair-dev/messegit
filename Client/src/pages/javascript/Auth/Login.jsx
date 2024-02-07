@@ -18,7 +18,7 @@ const Login = () => {
   useEffect(() => {
     if (cookies.jwt) {
       if (cookies.jwt === "undefined") {
-        removeCookie("jwt");
+        // removeCookie("jwt");
       } else {
         navigate("/");
       }
