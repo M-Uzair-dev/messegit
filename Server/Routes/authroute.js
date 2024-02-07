@@ -11,8 +11,8 @@ const {
   GetBlocked,
   unBlock,
   comparePass,
+  validateUser,
 } = require("../Controllers/authcontrollers");
-const { validateUser } = require("../Middleware/validateUser");
 
 const router = express.Router();
 

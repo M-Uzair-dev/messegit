@@ -249,3 +249,21 @@ module.exports.comparePass = async (req, res) => {
     res.status(200).json({ success: false });
   }
 };
+module.exports.validateUser = async (req, res, next) => {
+  try {
+    const id = req.body.id;
+
+    const user = await usermodel.findById(id);
+
+    if (!user) {
+      return res
+        .status(401)
+        .json({ status: false, message: "Unauthorized: Invalid user" });
+    }
+
+    res.status(200).json({ status: true, user });
+    return res.status(401).json({ status: false, message: "Invalid user." });
+  } catch (error) {
+    res.status(500).json({ status: false, message: "Internal server error" });
+  }
+};

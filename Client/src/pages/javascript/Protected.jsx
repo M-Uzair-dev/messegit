@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -8,7 +8,8 @@ import { setUser } from "../../Redux/Features/userSlice";
 export default function Protected() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let id = localStorage.getItem("id");
+  let userId = localStorage.getItem("id");
+  const id = useParams();
 
   useEffect(() => {
     const validate = async () => {
@@ -26,7 +27,7 @@ export default function Protected() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              id,
+              id: userId,
             }),
           }
         );
@@ -36,6 +37,8 @@ export default function Protected() {
         }
 
         const data = await response.json();
+
+        console.log(data);
         if (!data.status) {
           navigate("/login");
           localStorage.removeItem("id");
@@ -51,13 +54,13 @@ export default function Protected() {
         };
         dispatch(setUser(temp));
       } catch (error) {
-        console.log(error);
+        console.log("PR ERROR : " + error);
         navigate("/login");
       }
     };
 
     validate();
-  }, [id]);
+  }, [id, userId]);
 
   return (
     <div>
