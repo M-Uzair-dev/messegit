@@ -18,7 +18,7 @@ const Login = () => {
   useEffect(() => {
     if (cookies.jwt) {
       if (cookies.jwt === "undefined") {
-        // removeCookie("jwt");
+        removeCookie("jwt");
       } else {
         navigate("/");
       }
@@ -43,9 +43,11 @@ const Login = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              // Include credentials in the request headers
+              credentials: "include",
             },
             body: JSON.stringify(data),
-            credentials: "include",
+            // No need to include credentials separately, it should be in the headers
           }
         );
         const res = await response.json();
