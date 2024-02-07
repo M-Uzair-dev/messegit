@@ -7,7 +7,7 @@ import Button from "../../../components/javascript/Button";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
-import Confirm from "./confirm";
+import Confirm from "./Confirm";
 import { useSnackbar } from "notistack";
 
 const Settings = (props) => {

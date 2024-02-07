@@ -10,7 +10,7 @@ import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
-import Confirm from "./confirm";
+import Confirm from "./Confirm";
 import AddUsers from "./AddUsers";
 import io from "socket.io-client";
 import EmojiPicker from "emoji-picker-react";

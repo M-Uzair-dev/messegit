@@ -8,7 +8,7 @@ import { TailSpin } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import Confirm from "./confirm";
+import Confirm from "./Confirm";
 
 export default function SearchUser(props) {
   const [data, setData] = useState([]);

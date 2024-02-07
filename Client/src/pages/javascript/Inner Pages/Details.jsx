@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import { TailSpin } from "react-loader-spinner";
-import Confirm from "./confirm";
+import Confirm from "./Confirm";
 import AddUsers from "./AddUsers";
 
 export default function Details(props) {

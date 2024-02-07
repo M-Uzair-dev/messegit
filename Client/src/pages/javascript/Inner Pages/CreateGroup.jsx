@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import Button from "../../../components/javascript/Button";
 import tick from "../../../images/tick.png";
-import Confirm from "./confirm";
+import Confirm from "./Confirm";
 
 export default function CreateGroup(props) {
   const [data, setData] = useState([]);
