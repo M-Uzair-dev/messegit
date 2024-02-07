@@ -34,7 +34,7 @@ module.exports.login = async (req, res, next) => {
     res.status(200).json({ success: true });
   } catch (err) {
     res
-      .status(401)
+      .status(200)
       .json({ success: false, errorMessage: "Invalid email or password" });
   }
 };
