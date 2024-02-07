@@ -36,6 +36,7 @@ export default function Protected() {
         }
 
         const data = await response.json();
+        console.log(data);
         if (!data.status) {
           navigate("/login");
           localStorage.removeItem("id");
