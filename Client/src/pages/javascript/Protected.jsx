@@ -17,7 +17,7 @@ export default function Protected() {
     const validate = async () => {
       try {
         if (!cookies.jwt) {
-          // navigate("/login");
+          navigate("/login");
           return;
         }
 
@@ -29,6 +29,7 @@ export default function Protected() {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({}),
+            credentials: "include",
           }
         );
 

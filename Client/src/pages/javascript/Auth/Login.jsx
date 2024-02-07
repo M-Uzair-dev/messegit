@@ -45,10 +45,13 @@ const Login = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
+            credentials: "include",
           }
         );
+        const res = await response.json();
+        console.log(res);
 
-        if (response.success) {
+        if (res.success) {
           navigate("/chats");
         } else {
           enqueueSnackbar("Invalid Credentials", { variant: "error" });

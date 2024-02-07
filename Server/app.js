@@ -41,7 +41,6 @@ io.on("connection", (socket) => {
     socket.join(roomId);
   });
 
-  // Change the event data structure to send an object with message and username
   socket.on("sendMessage", ({ roomId, data }) => {
     io.to(roomId).emit("receiveMessage", data);
   });
