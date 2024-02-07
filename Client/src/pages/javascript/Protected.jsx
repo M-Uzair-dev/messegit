@@ -36,7 +36,6 @@ export default function Protected() {
         }
 
         const data = await response.json();
-        console.log(data);
         if (!data.status) {
           navigate("/login");
           localStorage.removeItem("id");
@@ -53,13 +52,12 @@ export default function Protected() {
         dispatch(setUser(temp));
       } catch (error) {
         console.log(error);
-        removeCookie("jwt");
         navigate("/login");
       }
     };
 
     validate();
-  }, []);
+  }, [id]);
 
   return (
     <div>
